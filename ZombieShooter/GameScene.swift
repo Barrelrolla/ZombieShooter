@@ -11,73 +11,63 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    var entities = [GKEntity]()
-    var graphs = [String : GKGraph]()
-    
     private var lastUpdateTime : TimeInterval = 0
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    let player = SKSpriteNode(imageNamed: "survivor1_gun")
     
     override func sceneDidLoad() {
-
-        self.lastUpdateTime = 0
+        let width = self.size.width
+        let height = self.size.height
+        var background = [SKSpriteNode]()
         
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
-        }
+        //(imageNamed: "tile_01")
+        var xPos: Int = 0
+        var yPos: Int = 0
+        repeat {
+            yPos = 0
+            repeat {
+                let tile = SKSpriteNode(imageNamed: "tile_01")
+                tile.position = CGPoint(x: xPos, y: yPos)
+                tile.zPosition = 0
+                background.append(tile)
+                self.addChild(tile)
+                yPos+=64
+            } while yPos < Int(height)
+            xPos+=64
+        } while xPos < Int(width)
         
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
-        
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
-            
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(M_PI), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
-        }
+        player.setScale(1)
+        player.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
+        player.zPosition = 1
+        self.addChild(player)
     }
     
-    
     func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
-        }
+        
     }
     
     func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
-        }
+        
     }
     
     func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
-        }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-        }
-        
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+        for t in touches {
+            let pos = t.location(in: self)
+            let prevPos = t.previousLocation(in: self)
+            let movedX = pos.x - prevPos.x
+            let movedY = pos.y - prevPos.y
+            
+            player.position.x += movedX
+            player.position.y += movedY
+            self.touchMoved(toPoint: t.location(in: self))
+        }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -98,12 +88,9 @@ class GameScene: SKScene {
         }
         
         // Calculate time since last update
-        let dt = currentTime - self.lastUpdateTime
+        // let dt = currentTime - self.lastUpdateTime
         
         // Update entities
-        for entity in self.entities {
-            entity.update(deltaTime: dt)
-        }
         
         self.lastUpdateTime = currentTime
     }
