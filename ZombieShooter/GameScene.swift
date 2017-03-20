@@ -105,12 +105,15 @@ class GameScene: SKScene {
             let pos = t.location(in: self.camera!)
             if leftStickRadius.contains(pos) {
                 isLeftStickActive = true
-                let moveStickAction = SKAction.move(to: CGPoint(x: pos.x, y: pos.y), duration: 0.1)
-                leftStick.run(moveStickAction)
+                leftStick.position = CGPoint(x: pos.x, y: pos.y)
+                deltaX = leftStickRadius.position.x - leftStick.position.x
+                deltaY = leftStickRadius.position.y - leftStick.position.y
             } else if rightStickRadius.contains(pos) {
                 isRightStickActive = true
-                let moveStickAction = SKAction.move(to: CGPoint(x: pos.x, y: pos.y), duration: 0.1)
-                rightStick.run(moveStickAction)
+                let rightVector = CGVector(dx: pos.x - rightStickRadius.position.x, dy: pos.y - rightStickRadius.position.y)
+                let rightAngle = atan2(rightVector.dy, rightVector.dx)
+                player.zRotation = rightAngle
+                rightStick.position = CGPoint(x: pos.x, y: pos.y)
             }
         }
     }
