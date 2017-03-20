@@ -16,14 +16,13 @@ class GameScene: SKScene {
     private var deltaX: CGFloat = 0
     private var deltaY: CGFloat = 0
     
-    let player = Player(texture: SKTexture(imageNamed: "survivor1_gun"), color: SKColor.blue, size: CGSize(width: 51, height: 43))
+    let player = PlayerFactory.getPlayer(type: PlayerType.Male)
     let leftStickRadius = SKSpriteNode(imageNamed: "transparentLight09")
     let leftStick = SKSpriteNode(imageNamed: "transparentLight49")
     let rightStickRadius = SKSpriteNode(imageNamed: "transparentLight09")
     let rightStick = SKSpriteNode(imageNamed: "transparentLight49")
     
     override func sceneDidLoad() {
-        self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         let width = self.size.width
         let height = self.size.height
         var background = [SKSpriteNode]()
@@ -55,9 +54,9 @@ class GameScene: SKScene {
             xPos+=64
         } while xPos < Int(height)
         
-        player.position = CGPoint(x: height / 2, y: width / 2)
-        player.zPosition = 1
-        self.addChild(player)
+        player?.position = CGPoint(x: height / 2, y: width / 2)
+        player?.zPosition = 2
+        self.addChild(player!)
         
         let camera = SKCameraNode()
         self.camera = camera
@@ -82,7 +81,7 @@ class GameScene: SKScene {
         rightStick.zPosition = 101
         camera.addChild(rightStick)
         
-        camera.position = CGPoint(x: player.position.x, y: player.position.y)
+        camera.position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
         let zoomAction = SKAction.scale(to: 2, duration: 0)
         camera.run(zoomAction)
         self.addChild(camera)
@@ -112,7 +111,8 @@ class GameScene: SKScene {
                 isRightStickActive = true
                 let rightVector = CGVector(dx: pos.x - rightStickRadius.position.x, dy: pos.y - rightStickRadius.position.y)
                 let rightAngle = atan2(rightVector.dy, rightVector.dx)
-                player.zRotation = rightAngle
+                player?.zRotation = rightAngle
+                player?.startShooting(scene: self, vector: rightVector)
                 rightStick.position = CGPoint(x: pos.x, y: pos.y)
             }
         }
@@ -150,11 +150,13 @@ class GameScene: SKScene {
             
             if rightStickRadius.contains(pos) {
                 rightStick.position = pos
-                player.zRotation = rightAngle
+                player?.zRotation = rightAngle
+                player?.startShooting(scene: self, vector: rightVector)
             } else {
                 if (isRightStickActive == true && pos.x > 0) {
                     rightStick.position = CGPoint(x: rightStickRadius.position.x - rightXDist, y: rightStickRadius.position.y + rightYDist)
-                    player.zRotation = rightAngle
+                    player?.zRotation = rightAngle
+                    player?.startShooting(scene: self, vector: rightVector)
                 }
             }
         }
@@ -173,6 +175,7 @@ class GameScene: SKScene {
                 isRightStickActive = false
                 let moveBackAction = SKAction.move(to: CGPoint(x: rightStickRadius.position.x, y: rightStickRadius.position.y), duration: 0.1)
                 rightStick.run(moveBackAction)
+                player?.stopShooting()
             }
         }
     }
@@ -194,9 +197,14 @@ class GameScene: SKScene {
         // let dt = currentTime - self.lastUpdateTime
         
         // Update entities
-        player.position.x -= deltaX / 4
-        player.position.y -= deltaY / 4
-        camera?.position = CGPoint(x: player.position.x, y: player.position.y)
+        player?.position.x -= deltaX / 4
+        player?.position.y -= deltaY / 4
+        camera?.position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
+        
+        if (isRightStickActive) {
+            let vector = CGVector(dx: rightStick.position.x - rightStickRadius.position.x, dy: rightStick.position.y - rightStickRadius.position.y)
+            player?.startShooting(scene: self, vector: vector)
+        }
         
         self.lastUpdateTime = currentTime
     }
