@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     private var lastUpdateTime : TimeInterval = 0
     private var isLeftStickActive = false
     private var isRightStickActive = false
@@ -25,34 +25,11 @@ class GameScene: SKScene {
     override func sceneDidLoad() {
         let width = self.size.width
         let height = self.size.height
-        var background = [SKSpriteNode]()
         
-        var xPos: Int = 0
-        var yPos: Int = 0
-        var rand = 0
-        var tile: SKSpriteNode
-        repeat {
-            yPos = 0
-            repeat {
-                if (rand % 2 == 0) {
-                    tile = SKSpriteNode(imageNamed: "tile_01")
-                } else if (rand % 3 == 0) {
-                    tile = SKSpriteNode(imageNamed: "tile_02")
-                } else if (rand % 4 == 0) {
-                    tile = SKSpriteNode(imageNamed: "tile_03")
-                } else {
-                    tile = SKSpriteNode(imageNamed: "tile_04")
-                }
-                
-                rand+=1
-                tile.position = CGPoint(x: xPos, y: yPos)
-                tile.zPosition = 0
-                background.append(tile)
-                self.addChild(tile)
-                yPos+=64
-            } while yPos < Int(width)
-            xPos+=64
-        } while xPos < Int(height)
+        self.physicsWorld.contactDelegate = self
+        // var background = [SKSpriteNode]()
+        
+        LevelFactory.addLevel(number: 1, scene: self)
         
         player?.position = CGPoint(x: height / 2, y: width / 2)
         player?.zPosition = 2
@@ -85,6 +62,23 @@ class GameScene: SKScene {
         let zoomAction = SKAction.scale(to: 2, duration: 0)
         camera.run(zoomAction)
         self.addChild(camera)
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        var body1 = SKPhysicsBody()
+        var body2 = SKPhysicsBody()
+        
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            body1 = contact.bodyA
+            body2 = contact.bodyB
+        } else {
+            body1 = contact.bodyB
+            body2 = contact.bodyA
+        }
+        
+        if body1.categoryBitMask == PhysicsCategories.Bullet && body2.categoryBitMask == PhysicsCategories.Wall {
+            body1.node?.removeFromParent()
+        }
     }
     
     func touchDown(atPoint pos : CGPoint) {

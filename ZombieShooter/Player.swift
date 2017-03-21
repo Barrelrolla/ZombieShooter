@@ -15,6 +15,10 @@ class Player : SKSpriteNode {
     override init(texture: SKTexture!, color: SKColor, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
         self.weapon = Weapon(ammo: 10, shootRate: 0.3)
+        self.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
+        self.physicsBody?.affectedByGravity = false
+        self.physicsBody?.categoryBitMask = PhysicsCategories.Player
+        self.physicsBody?.collisionBitMask = PhysicsCategories.Wall
     }
     
     func startShooting(scene: GameScene, vector: CGVector) {

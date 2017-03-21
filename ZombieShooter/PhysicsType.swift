@@ -1,5 +1,5 @@
 //
-//  Constants.swift
+//  PhysicsType.swift
 //  ZombieShooter
 //
 //  Created by JT on 3/21/17.
