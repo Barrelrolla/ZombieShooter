@@ -10,11 +10,34 @@ import Foundation
 import SpriteKit
 
 class Player : SKSpriteNode {
-    private var ammo: Int = 100
-    private var weapon: Int = 1
+    private var weapon: Weapon!
     
     override init(texture: SKTexture!, color: SKColor, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
+        self.weapon = Weapon(ammo: 10, shootRate: 0.3)
+    }
+    
+    func startShooting(scene: GameScene, vector: CGVector) {
+        let currAction = self.action(forKey: "shooting")
+        if (currAction == nil) {
+            var dx = vector.dx
+            var dy = vector.dy
+            let magnitude = sqrt(dx * dx + dy * dy)
+            dx /= magnitude
+            dy /= magnitude
+            let newVector = CGVector(dx: 500*dx, dy: 500*dy)
+        
+            let shoot = SKAction(self.weapon.shoot(scene: scene, vector: newVector, x: self.position.x, y: self.position.y, zRotation: self.zRotation))
+            let wait = SKAction.wait(forDuration: self.weapon.shootRate)
+            let deleteAction = SKAction(self.removeAction(forKey: "shooting"))
+            let shootAndWait = SKAction.sequence([shoot, wait, deleteAction])
+            //let shooting = SKAction.repeatForever(shootAndWait)
+            self.run(shootAndWait, withKey: "shooting")
+        }
+    }
+    
+    func stopShooting() {
+        self.removeAction(forKey: "shooting")
     }
     
     required init?(coder aDecoder: NSCoder) {
