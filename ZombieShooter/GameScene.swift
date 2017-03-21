@@ -175,7 +175,7 @@ class GameScene: SKScene {
                 isRightStickActive = false
                 let moveBackAction = SKAction.move(to: CGPoint(x: rightStickRadius.position.x, y: rightStickRadius.position.y), duration: 0.1)
                 rightStick.run(moveBackAction)
-                player?.stopShooting()
+                //player?.stopShooting()
             }
         }
     }

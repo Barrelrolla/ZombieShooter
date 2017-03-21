@@ -11,9 +11,9 @@ import SpriteKit
 
 class Weapon {
     public var ammo: Int
-    public var shootRate: Float
+    public var shootRate: Double
     
-    init(ammo: Int, shootRate: Float) {
+    init(ammo: Int, shootRate: Double) {
         self.ammo = ammo
         self.shootRate = shootRate
     }
@@ -25,7 +25,9 @@ class Weapon {
         bullet.zRotation = zRotation
         bullet.setScale(0.5)
         scene.addChild(bullet)
-        let move = SKAction.move(by: vector, duration: 1)
-        bullet.run(move)
+        let move = SKAction.move(by: vector, duration: 0.7)
+        let remove = SKAction.removeFromParent()
+        let moveAndRemove = SKAction.sequence([move, remove])
+        bullet.run(moveAndRemove)
     }
 }
