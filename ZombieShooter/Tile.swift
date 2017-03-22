@@ -1,5 +1,5 @@
 //
-//  WallTile.swift
+//  Tile.swift
 //  ZombieShooter
 //
 //  Created by JT on 3/21/17.
@@ -9,21 +9,13 @@
 import Foundation
 import SpriteKit
 
-class WallTile : SKSpriteNode {
+class Tile : SKSpriteNode {
     
     override init(texture: SKTexture!, color: SKColor, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
         self.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
-        self.lightingBitMask = 1
-        self.shadowedBitMask = 1
-        self.shadowCastBitMask = 1
         self.physicsBody?.affectedByGravity = false
-        self.physicsBody?.pinned = true
-        self.physicsBody?.allowsRotation = false
-        self.physicsBody?.categoryBitMask = PhysicsCategories.Wall
-        self.physicsBody?.collisionBitMask = PhysicsCategories.Player
-        self.physicsBody?.contactTestBitMask = PhysicsCategories.Bullet
-        self.zPosition = 1
+        self.physicsBody?.categoryBitMask = PhysicsCategories.None
     }
     
     required init?(coder aDecoder: NSCoder) {

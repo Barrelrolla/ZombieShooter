@@ -10,15 +10,20 @@ import Foundation
 import SpriteKit
 
 class Player : SKSpriteNode {
+    private var health: Int = 10
     private var weapon: Weapon!
     
     override init(texture: SKTexture!, color: SKColor, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
         self.weapon = Weapon(ammo: 10, shootRate: 0.3)
         self.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
+        self.lightingBitMask = 1
+        self.shadowCastBitMask = 1
+        self.shadowedBitMask = 1
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.categoryBitMask = PhysicsCategories.Player
-        self.physicsBody?.collisionBitMask = PhysicsCategories.Wall
+        self.physicsBody?.collisionBitMask = PhysicsCategories.Wall | PhysicsCategories.Zombie
+        self.physicsBody?.contactTestBitMask = PhysicsCategories.Zombie
     }
     
     func startShooting(scene: GameScene, vector: CGVector) {
@@ -42,6 +47,22 @@ class Player : SKSpriteNode {
     
     func stopShooting() {
         self.removeAction(forKey: "shooting")
+    }
+    
+    func takeDamage(amount: Int) {
+        self.health -= amount
+        if health <= 0 {
+            self.removeAllChildren()
+            self.removeFromParent()
+        }
+    }
+    
+    func isAlive() -> Bool {
+        if self.health <= 0 {
+            return false
+        } else {
+            return true
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

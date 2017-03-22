@@ -16,6 +16,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var deltaX: CGFloat = 0
     private var deltaY: CGFloat = 0
     
+    let hasLighting = true
     let player = PlayerFactory.getPlayer(type: PlayerType.Male)
     let leftStickRadius = SKSpriteNode(imageNamed: "transparentLight09")
     let leftStick = SKSpriteNode(imageNamed: "transparentLight49")
@@ -23,9 +24,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let rightStick = SKSpriteNode(imageNamed: "transparentLight49")
     
     override func sceneDidLoad() {
+        self.startGame()
+    }
+    
+    func resetGame() {
+        self.camera?.removeAllChildren()
+        self.removeAllChildren()
+        self.startGame()
+    }
+    
+    func startGame() {
         let width = self.size.width
         let height = self.size.height
-        
+        //self.backgroundColor = SKColor(red: 182/255, green: 223/255, blue: 249/255, alpha: 1)
+        self.backgroundColor = SKColor.black
         self.physicsWorld.contactDelegate = self
         // var background = [SKSpriteNode]()
         
@@ -34,6 +46,52 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player?.position = CGPoint(x: height / 2, y: width / 2)
         player?.zPosition = 2
         self.addChild(player!)
+        /*
+         let dot = SKShapeNode(circleOfRadius: 1)
+         dot.fillColor = SKColor.red
+         dot.strokeColor = SKColor.red
+         dot.position = CGPoint(x: 30, y: -10)
+         dot.zPosition = 5
+         player?.addChild(dot)
+         let texture = SKTexture(imageNamed: "obscurer2")
+         let leftLightObscurer = SKSpriteNode(texture: texture)
+         leftLightObscurer.anchorPoint = CGPoint(x: 0, y: 0)
+         leftLightObscurer.position = CGPoint(x: -20, y: -20)
+         leftLightObscurer.zPosition = 2
+         leftLightObscurer.lightingBitMask = 1
+         leftLightObscurer.shadowedBitMask = 1
+         leftLightObscurer.shadowCastBitMask = 1
+         leftLightObscurer.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
+         leftLightObscurer.physicsBody?.affectedByGravity = false
+         leftLightObscurer.physicsBody?.categoryBitMask = PhysicsCategories.None
+         leftLightObscurer.physicsBody?.collisionBitMask = PhysicsCategories.None
+         leftLightObscurer.alpha = 0.1
+         player?.addChild(leftLightObscurer)
+         let rightLightObscurer = SKSpriteNode(texture: texture)
+         rightLightObscurer.anchorPoint = CGPoint(x: 0, y: 0)
+         rightLightObscurer.position = CGPoint(x: -20, y: 20)
+         rightLightObscurer.zPosition = 2
+         rightLightObscurer.lightingBitMask = 1
+         rightLightObscurer.shadowedBitMask = 1
+         rightLightObscurer.shadowCastBitMask = 1
+         rightLightObscurer.alpha = 0.1
+         rightLightObscurer.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
+         rightLightObscurer.physicsBody?.affectedByGravity = false
+         rightLightObscurer.physicsBody?.categoryBitMask = PhysicsCategories.None
+         rightLightObscurer.physicsBody?.collisionBitMask = PhysicsCategories.None
+         rightLightObscurer.yScale = rightLightObscurer.yScale * -1
+         player?.addChild(rightLightObscurer)
+         */
+        if hasLighting == true {
+            let light = SKLightNode()
+            light.ambientColor = SKColor.black
+            light.lightColor = SKColor.white
+            light.position = CGPoint(x: 0, y: 0)
+            light.falloff = 1.3
+            light.zPosition = 1
+            player?.addChild(light)
+        }
+        
         
         let camera = SKCameraNode()
         self.camera = camera
@@ -59,9 +117,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         camera.addChild(rightStick)
         
         camera.position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
-        let zoomAction = SKAction.scale(to: 2, duration: 0)
+        let zoomAction = SKAction.scale(to: 2.5, duration: 0)
         camera.run(zoomAction)
         self.addChild(camera)
+        
+        let spawnAction = SKAction.run(spawnZombie)
+        let waitAction = SKAction.wait(forDuration: 3)
+        let spawnSequence = SKAction.sequence([spawnAction, waitAction])
+        let spawnForever = SKAction.repeatForever(spawnSequence)
+        self.run(spawnForever)
+    }
+    
+    func spawnZombie() {
+        let zombie = ZombieFactory.getNewZombie()
+        let rng = Int(RandomGenerator.random(min: 0, max: 3))
+        if rng == 0 {
+            let newrng = RandomGenerator.random(min: 0, max: self.size.height * 4)
+            zombie.position = CGPoint(x: 0, y: newrng)
+        } else if rng == 1 {
+            let newrng = RandomGenerator.random(min: 0, max: self.size.height * 4)
+            zombie.position = CGPoint(x: self.size.width * 4, y: newrng)
+        } else if rng == 2 {
+            let newrng = RandomGenerator.random(min: 0, max: self.size.width * 4)
+            zombie.position = CGPoint(x: newrng, y: 0)
+        } else {
+            let newrng = RandomGenerator.random(min: 0, max: self.size.width * 4)
+            zombie.position = CGPoint(x: newrng, y: self.size.height * 4)
+        }
+        
+        self.addChild(zombie)
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -78,6 +162,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if body1.categoryBitMask == PhysicsCategories.Bullet && body2.categoryBitMask == PhysicsCategories.Wall {
             body1.node?.removeFromParent()
+        } else if body1.categoryBitMask == PhysicsCategories.Bullet && body2.categoryBitMask == PhysicsCategories.Zombie {
+            if body2.node != nil {
+                let zombie = body2.node as! Zombie
+                zombie.takeDamage(amount: 1)
+                body1.node?.removeFromParent()
+            }
+        } else if body1.categoryBitMask == PhysicsCategories.Player && body2.categoryBitMask == PhysicsCategories.Zombie {
+            player?.takeDamage(amount: 1)
         }
     }
     
@@ -178,7 +270,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
     
-    
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         
@@ -191,6 +282,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // let dt = currentTime - self.lastUpdateTime
         
         // Update entities
+        if player?.isAlive() == false {
+            self.run(SKAction.sequence([
+                SKAction.wait(forDuration: 2),
+                SKAction.run(resetGame)
+            ]))
+        }
+        
         player?.position.x -= deltaX / 4
         player?.position.y -= deltaY / 4
         camera?.position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
@@ -198,6 +296,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (isRightStickActive) {
             let vector = CGVector(dx: rightStick.position.x - rightStickRadius.position.x, dy: rightStick.position.y - rightStickRadius.position.y)
             player?.startShooting(scene: self, vector: vector)
+        }
+        
+        
+        for child in self.children {
+            if child.name == "zombie" {
+                let zombie = child as! Zombie
+                let moveAction = SKAction.move(to: (player?.position)!, duration: 2)
+                zombie.run(moveAction)
+                let vector = CGVector(dx: (player?.position.x)! - zombie.position.x, dy: (player?.position.y)! - zombie.position.y)
+                let angle = atan2(vector.dy, vector.dx)
+                zombie.zRotation = angle
+            }
         }
         
         self.lastUpdateTime = currentTime
