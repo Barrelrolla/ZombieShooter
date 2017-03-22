@@ -26,7 +26,7 @@ class LevelFactory {
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ]
     
-    static func addLevel(number: Int, scene: GameScene, tileMap: SKTileSet) {
+    static func addLevel(number: Int, scene: GameScene) {
         if (number == 1) {
             let level = level1
             var row = 0
