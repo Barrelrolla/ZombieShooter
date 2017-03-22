@@ -9,20 +9,13 @@
 import Foundation
 import SpriteKit
 
-class GroundTile : SKSpriteNode {
+class GroundTile : SKTexture {
     
-    override init(texture: SKTexture!, color: SKColor, size: CGSize) {
-        super.init(texture: texture, color: color, size: size)
-        self.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
-        self.physicsBody?.affectedByGravity = false
-        self.physicsBody?.pinned = true
-        self.physicsBody?.allowsRotation = false
-        self.physicsBody?.categoryBitMask = PhysicsCategories.None
-        self.physicsBody?.collisionBitMask = PhysicsCategories.None
-        self.zPosition = 0
+    init(imageNamed: String) {
+        super.ini
     }
     
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
 }

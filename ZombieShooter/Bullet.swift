@@ -16,7 +16,7 @@ class Bullet : SKSpriteNode {
         self.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.categoryBitMask = PhysicsCategories.Bullet
-        self.physicsBody?.collisionBitMask = PhysicsCategories.None
+        self.physicsBody?.collisionBitMask = PhysicsCategories.Zombie
         self.physicsBody?.contactTestBitMask = PhysicsCategories.Wall | PhysicsCategories.Zombie
     }
     
