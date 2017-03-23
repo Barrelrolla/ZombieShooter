@@ -23,12 +23,13 @@
 		C57E61F11E8149DD00D93BD1 /* RandomGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E61F01E8149DD00D93BD1 /* RandomGenerator.swift */; };
 		C57E61F71E814B4E00D93BD1 /* WallTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E61F61E814B4E00D93BD1 /* WallTile.swift */; };
 		C57E61F91E814B9700D93BD1 /* LevelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E61F81E814B9700D93BD1 /* LevelFactory.swift */; };
-		C57E61FB1E81503800D93BD1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E61FA1E81503800D93BD1 /* Constants.swift */; };
 		C59A2C101E82A61E0087DB6B /* Zombie.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C0F1E82A61E0087DB6B /* Zombie.swift */; };
 		C59A2C121E82A8130087DB6B /* ZombieFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C111E82A8130087DB6B /* ZombieFactory.swift */; };
 		C59A2C171E83FC660087DB6B /* coolFont.TTF in Resources */ = {isa = PBXBuildFile; fileRef = C59A2C161E83FC650087DB6B /* coolFont.TTF */; };
 		C59A2C191E83FEB30087DB6B /* ZombieType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C181E83FEB30087DB6B /* ZombieType.swift */; };
 		C59A2C1B1E842AFE0087DB6B /* BoxTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C1A1E842AFE0087DB6B /* BoxTile.swift */; };
+		C59A2C1D1E8476630087DB6B /* SpriteLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C1C1E8476630087DB6B /* SpriteLayer.swift */; };
+		C59A2C1F1E8483EB0087DB6B /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C1E1E8483EB0087DB6B /* GameOverScene.swift */; };
 		C5D1F0401E7F4AFA00CEEC88 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D1F03F1E7F4AFA00CEEC88 /* Player.swift */; };
 /* End PBXBuildFile section */
 
@@ -51,12 +52,13 @@
 		C57E61F01E8149DD00D93BD1 /* RandomGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomGenerator.swift; sourceTree = "<group>"; };
 		C57E61F61E814B4E00D93BD1 /* WallTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallTile.swift; sourceTree = "<group>"; };
 		C57E61F81E814B9700D93BD1 /* LevelFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelFactory.swift; sourceTree = "<group>"; };
-		C57E61FA1E81503800D93BD1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C59A2C0F1E82A61E0087DB6B /* Zombie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zombie.swift; sourceTree = "<group>"; };
 		C59A2C111E82A8130087DB6B /* ZombieFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieFactory.swift; sourceTree = "<group>"; };
 		C59A2C161E83FC650087DB6B /* coolFont.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = coolFont.TTF; sourceTree = "<group>"; };
 		C59A2C181E83FEB30087DB6B /* ZombieType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieType.swift; sourceTree = "<group>"; };
 		C59A2C1A1E842AFE0087DB6B /* BoxTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoxTile.swift; sourceTree = "<group>"; };
+		C59A2C1C1E8476630087DB6B /* SpriteLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteLayer.swift; sourceTree = "<group>"; };
+		C59A2C1E1E8483EB0087DB6B /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		C5D1F03F1E7F4AFA00CEEC88 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,6 +116,7 @@
 				C55769E31E807BCB001E836A /* PlayerType.swift */,
 				C57E61EE1E81467B00D93BD1 /* PhysicsCategories.swift */,
 				C59A2C181E83FEB30087DB6B /* ZombieType.swift */,
+				C59A2C1C1E8476630087DB6B /* SpriteLayer.swift */,
 			);
 			name = Enums;
 			sourceTree = "<group>";
@@ -132,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				C5032B4F1E7C07DD007DB5CE /* GameScene.swift */,
+				C59A2C1E1E8483EB0087DB6B /* GameOverScene.swift */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -140,7 +144,6 @@
 			isa = PBXGroup;
 			children = (
 				C57E61F01E8149DD00D93BD1 /* RandomGenerator.swift */,
-				C57E61FA1E81503800D93BD1 /* Constants.swift */,
 			);
 			name = Utilites;
 			sourceTree = "<group>";
@@ -238,17 +241,18 @@
 				C5D1F0401E7F4AFA00CEEC88 /* Player.swift in Sources */,
 				C5032B501E7C07DD007DB5CE /* GameScene.swift in Sources */,
 				C57E61F91E814B9700D93BD1 /* LevelFactory.swift in Sources */,
+				C59A2C1D1E8476630087DB6B /* SpriteLayer.swift in Sources */,
 				C55769E91E80816E001E836A /* Bullet.swift in Sources */,
 				C55769E61E807C2F001E836A /* PlayerFactory.swift in Sources */,
 				C57E61F11E8149DD00D93BD1 /* RandomGenerator.swift in Sources */,
 				C57E61EF1E81467B00D93BD1 /* PhysicsCategories.swift in Sources */,
+				C59A2C1F1E8483EB0087DB6B /* GameOverScene.swift in Sources */,
 				C59A2C101E82A61E0087DB6B /* Zombie.swift in Sources */,
 				C5032B521E7C07DD007DB5CE /* GameViewController.swift in Sources */,
 				C59A2C191E83FEB30087DB6B /* ZombieType.swift in Sources */,
 				C5032B4A1E7C07DD007DB5CE /* AppDelegate.swift in Sources */,
 				C59A2C1B1E842AFE0087DB6B /* BoxTile.swift in Sources */,
 				C59A2C121E82A8130087DB6B /* ZombieFactory.swift in Sources */,
-				C57E61FB1E81503800D93BD1 /* Constants.swift in Sources */,
 				C55769F01E80843A001E836A /* Weapon.swift in Sources */,
 				C57E61F71E814B4E00D93BD1 /* WallTile.swift in Sources */,
 			);

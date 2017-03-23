@@ -21,7 +21,7 @@ class Zombie : SKSpriteNode {
         super.init(texture: texture, color: SKColor.red, size: texture.size())
         self.name = "zombie"
         self.scale(to: scale)
-        self.zPosition = 2
+        self.zPosition = SpriteLayer.Characters
         self.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
         self.lightingBitMask = 1
         self.shadowCastBitMask = 1
@@ -35,8 +35,8 @@ class Zombie : SKSpriteNode {
     func takeDamage(amount: Int, scene: GameScene) {
         health -= amount
         if health <= 0 {
-            scene.gameScore += points
-            scene.scoreLabel.text = "Score: \(scene.gameScore)"
+            gameScore += points
+            scene.scoreLabel.text = "Score: \(gameScore)"
             let scaleUp = SKAction.scale(to: 1.1, duration: 0.2)
             let scaleDown = SKAction.scale(to: 1, duration: 0.2)
             let scaleSeq = SKAction.sequence([scaleUp, scaleDown])

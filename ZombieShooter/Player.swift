@@ -11,12 +11,12 @@ import SpriteKit
 
 class Player : SKSpriteNode {
     private var health: Int = 10
-    private var weapon: Weapon!
+    private var weapon = Weapon(ammo: 10, shootRate: 0.3)
     
     override init(texture: SKTexture!, color: SKColor, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
-        self.weapon = Weapon(ammo: 10, shootRate: 0.3)
         self.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
+        self.zPosition = SpriteLayer.Characters
         self.lightingBitMask = 1
         self.shadowCastBitMask = 1
         self.shadowedBitMask = 1
@@ -49,19 +49,14 @@ class Player : SKSpriteNode {
         self.removeAction(forKey: "shooting")
     }
     
-    func takeDamage(amount: Int) {
-        self.health -= amount
-        if health <= 0 {
-            self.removeAllChildren()
-            self.removeFromParent()
-        }
-    }
-    
-    func isAlive() -> Bool {
-        if self.health <= 0 {
-            return false
-        } else {
-            return true
+    func takeDamage(amount: Int, scene: GameScene) {
+        if health > 0 {
+            self.health -= amount
+            if health <= 0 {
+                self.removeAllActions()
+                self.removeAllChildren()
+                scene.gameOver()
+            }
         }
     }
     

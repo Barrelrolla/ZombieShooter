@@ -23,7 +23,7 @@ class WallTile : SKSpriteNode {
         self.physicsBody?.categoryBitMask = PhysicsCategories.Wall
         self.physicsBody?.collisionBitMask = PhysicsCategories.Player | PhysicsCategories.Box
         self.physicsBody?.contactTestBitMask = PhysicsCategories.Bullet
-        self.zPosition = 5
+        self.zPosition = SpriteLayer.Walls
     }
     
     required init?(coder aDecoder: NSCoder) {

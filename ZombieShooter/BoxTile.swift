@@ -22,7 +22,7 @@ class BoxTile : SKSpriteNode {
         self.physicsBody?.allowsRotation = true
         self.physicsBody?.categoryBitMask = PhysicsCategories.Box
         self.physicsBody?.collisionBitMask = PhysicsCategories.Player | PhysicsCategories.Zombie | PhysicsCategories.Box | PhysicsCategories.Wall
-        self.zPosition = 1
+        self.zPosition = SpriteLayer.Boxes
     }
     
     required init?(coder aDecoder: NSCoder) {
