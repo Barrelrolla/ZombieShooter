@@ -9,6 +9,8 @@
 import SpriteKit
 import GameplayKit
 
+var gameScore = 0
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     private var lastUpdateTime : TimeInterval = 0
     private var isLeftStickActive = false
@@ -16,9 +18,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var deltaX: CGFloat = 0
     private var deltaY: CGFloat = 0
     
+    var enemyCount = 0
+    var isGameOver = false
     var player = PlayerFactory.getPlayer(type: PlayerType.Male)
-    var gameScore = 0
-    let scoreLabel = SKLabelNode(fontNamed: "FeastofFleshBB")
+    let scoreLabel = SKLabelNode(fontNamed: Constants.FontName)
     let hasLighting = true
     let background: SKTileMapNode = LevelFactory.generateBackground()
     let leftStickRadius = SKSpriteNode(imageNamed: "transparentLight09")
@@ -36,18 +39,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.removeAllChildren()
         gameScore = 0
         player = PlayerFactory.getPlayer(type: PlayerType.Male)
+        isGameOver = false
         self.startGame()
     }
     
     func startGame() {
         let width = self.size.width
         let height = self.size.height
+        gameScore = 0
         //self.backgroundColor = SKColor(red: 182/255, green: 223/255, blue: 249/255, alpha: 1)
         self.backgroundColor = SKColor.black
         self.physicsWorld.contactDelegate = self
         // var background = [SKSpriteNode]()
         
-        background.zPosition = 0
+        background.zPosition = SpriteLayer.Background
         background.anchorPoint = CGPoint(x: 0, y: 0)
         background.position = CGPoint(x: 0, y: 0)
         background.lightingBitMask = 1
@@ -56,7 +61,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         LevelFactory.addLevel(number: 1, scene: self)
         
         player?.position = CGPoint(x: height / 2, y: width / 2)
-        player?.zPosition = 2
         self.addChild(player!)
         /*
          let dot = SKShapeNode(circleOfRadius: 1)
@@ -100,7 +104,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             light.lightColor = SKColor.white
             light.position = CGPoint(x: 0, y: 0)
             light.falloff = 1.3
-            light.zPosition = 1
+            light.zPosition = SpriteLayer.Bullets
             player?.addChild(light)
         }
         
@@ -110,24 +114,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         leftStickRadius.setScale(0.35)
         leftStickRadius.position = CGPoint(x: -120, y: -50)
-        leftStickRadius.zPosition = 100
+        leftStickRadius.zPosition = SpriteLayer.UILower
         leftStickRadius.alpha = 0.5
         camera.addChild(leftStickRadius)
         
         leftStick.setScale(0.25)
         leftStick.position = CGPoint(x: leftStickRadius.position.x, y: leftStickRadius.position.y)
-        leftStick.zPosition = 101
+        leftStick.zPosition = SpriteLayer.UIUpper
         camera.addChild(leftStick)
         
         rightStickRadius.setScale(0.35)
         rightStickRadius.position = CGPoint(x: 120, y: -50)
-        rightStickRadius.zPosition = 100
+        rightStickRadius.zPosition = SpriteLayer.UILower
         rightStickRadius.alpha = 0.5
         camera.addChild(rightStickRadius)
         
         rightStick.setScale(0.25)
         rightStick.position = CGPoint(x: rightStickRadius.position.x, y: rightStickRadius.position.y)
-        rightStick.zPosition = 101
+        rightStick.zPosition = SpriteLayer.UIUpper
         camera.addChild(rightStick)
         
         scoreLabel.text = "Score: \(gameScore)"
@@ -135,7 +139,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.color = SKColor.white
         scoreLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
         scoreLabel.position = CGPoint(x: -150, y: 70)
-        scoreLabel.zPosition = 100
+        scoreLabel.zPosition = SpriteLayer.UIUpper
         camera.addChild(scoreLabel)
         
         camera.position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
@@ -148,6 +152,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let spawnSequence = SKAction.sequence([spawnAction, waitAction])
         let spawnForever = SKAction.repeatForever(spawnSequence)
         self.run(spawnForever)
+    }
+    
+    func gameOver() {
+        isGameOver = true
+        leftStick.removeFromParent()
+        leftStickRadius.removeFromParent()
+        rightStick.removeFromParent()
+        rightStickRadius.removeFromParent()
+        let redLight = SKLightNode()
+        redLight.ambientColor = SKColor.red
+        redLight.lightColor = SKColor.red
+        redLight.position = CGPoint(x: background.mapSize.height - background.tileSize.height, y: background.mapSize.width - background.tileSize.width)
+        redLight.falloff = 1.3
+        redLight.zPosition = SpriteLayer.Walls
+        self.addChild(redLight)
+        self.run(SKAction.sequence([
+            SKAction.wait(forDuration: 2),
+            SKAction.run(changeScene)
+        ]))
+        
+    }
+    
+    func changeScene() {
+        let newScene = GameOverScene(size: UIScreen.main.bounds.size)
+        newScene.scaleMode = .fill
+        let transition = SKTransition.crossFade(withDuration: 1)
+        self.view?.presentScene(newScene, transition: transition)
     }
     
     func spawnZombie() {
@@ -191,7 +222,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 body1.node?.removeFromParent()
             }
         } else if body1.categoryBitMask == PhysicsCategories.Player && body2.categoryBitMask == PhysicsCategories.Zombie {
-            player?.takeDamage(amount: 1)
+            player?.takeDamage(amount: 1, scene: self)
         }
     }
     
@@ -208,63 +239,67 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches {
-            let pos = t.location(in: self.camera!)
-            if leftStickRadius.contains(pos) {
-                isLeftStickActive = true
-                leftStick.position = CGPoint(x: pos.x, y: pos.y)
-                deltaX = leftStickRadius.position.x - leftStick.position.x
-                deltaY = leftStickRadius.position.y - leftStick.position.y
-            } else if rightStickRadius.contains(pos) {
-                isRightStickActive = true
-                let rightVector = CGVector(dx: pos.x - rightStickRadius.position.x, dy: pos.y - rightStickRadius.position.y)
-                let rightAngle = atan2(rightVector.dy, rightVector.dx)
-                player?.zRotation = rightAngle
-                player?.startShooting(scene: self, vector: rightVector)
-                rightStick.position = CGPoint(x: pos.x, y: pos.y)
+        if isGameOver == false {
+            for t in touches {
+                let pos = t.location(in: self.camera!)
+                if leftStickRadius.contains(pos) {
+                    isLeftStickActive = true
+                    leftStick.position = CGPoint(x: pos.x, y: pos.y)
+                    deltaX = leftStickRadius.position.x - leftStick.position.x
+                    deltaY = leftStickRadius.position.y - leftStick.position.y
+                } else if rightStickRadius.contains(pos) {
+                    isRightStickActive = true
+                    let rightVector = CGVector(dx: pos.x - rightStickRadius.position.x, dy: pos.y - rightStickRadius.position.y)
+                    let rightAngle = atan2(rightVector.dy, rightVector.dx)
+                    player?.zRotation = rightAngle
+                    player?.startShooting(scene: self, vector: rightVector)
+                    rightStick.position = CGPoint(x: pos.x, y: pos.y)
+                }
             }
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches {
-            let pos = t.location(in: self.camera!)
-            
-            let leftVector = CGVector(dx: pos.x - leftStickRadius.position.x, dy: pos.y - leftStickRadius.position.y)
-            let leftAngle = atan2(leftVector.dy,leftVector.dx)
-            let leftLength: CGFloat = leftStickRadius.frame.size.height / 2
-            
-            let leftXDist:CGFloat = sin(leftAngle - 1.57079633) * leftLength
-            let leftYDist:CGFloat = cos(leftAngle - 1.57079633) * leftLength
-            
-            let rightVector = CGVector(dx: pos.x - rightStickRadius.position.x, dy: pos.y - rightStickRadius.position.y)
-            let rightAngle = atan2(rightVector.dy, rightVector.dx)
-            let rightLength: CGFloat = rightStickRadius.frame.size.height / 2
-            
-            let rightXDist:CGFloat = sin(rightAngle - 1.57079633) * rightLength
-            let rightYDist:CGFloat = cos(rightAngle - 1.57079633) * rightLength
-            
-            if leftStickRadius.contains(pos) {
-                leftStick.position = pos
-                deltaX = leftStickRadius.position.x - leftStick.position.x
-                deltaY = leftStickRadius.position.y - leftStick.position.y
-            } else {
-                if (isLeftStickActive == true && pos.x < 0) {
-                    leftStick.position = CGPoint(x: leftStickRadius.position.x - leftXDist, y: leftStickRadius.position.y + leftYDist)
+        if isGameOver == false {
+            for t in touches {
+                let pos = t.location(in: self.camera!)
+                
+                let leftVector = CGVector(dx: pos.x - leftStickRadius.position.x, dy: pos.y - leftStickRadius.position.y)
+                let leftAngle = atan2(leftVector.dy,leftVector.dx)
+                let leftLength: CGFloat = leftStickRadius.frame.size.height / 2
+                
+                let leftXDist:CGFloat = sin(leftAngle - 1.57079633) * leftLength
+                let leftYDist:CGFloat = cos(leftAngle - 1.57079633) * leftLength
+                
+                let rightVector = CGVector(dx: pos.x - rightStickRadius.position.x, dy: pos.y - rightStickRadius.position.y)
+                let rightAngle = atan2(rightVector.dy, rightVector.dx)
+                let rightLength: CGFloat = rightStickRadius.frame.size.height / 2
+                
+                let rightXDist:CGFloat = sin(rightAngle - 1.57079633) * rightLength
+                let rightYDist:CGFloat = cos(rightAngle - 1.57079633) * rightLength
+                
+                if leftStickRadius.contains(pos) {
+                    leftStick.position = pos
                     deltaX = leftStickRadius.position.x - leftStick.position.x
                     deltaY = leftStickRadius.position.y - leftStick.position.y
+                } else {
+                    if (isLeftStickActive == true && pos.x < 0) {
+                        leftStick.position = CGPoint(x: leftStickRadius.position.x - leftXDist, y: leftStickRadius.position.y + leftYDist)
+                        deltaX = leftStickRadius.position.x - leftStick.position.x
+                        deltaY = leftStickRadius.position.y - leftStick.position.y
+                    }
                 }
-            }
-            
-            if rightStickRadius.contains(pos) {
-                rightStick.position = pos
-                player?.zRotation = rightAngle
-                player?.startShooting(scene: self, vector: rightVector)
-            } else {
-                if (isRightStickActive == true && pos.x > 0) {
-                    rightStick.position = CGPoint(x: rightStickRadius.position.x - rightXDist, y: rightStickRadius.position.y + rightYDist)
+                
+                if rightStickRadius.contains(pos) {
+                    rightStick.position = pos
                     player?.zRotation = rightAngle
                     player?.startShooting(scene: self, vector: rightVector)
+                } else {
+                    if (isRightStickActive == true && pos.x > 0) {
+                        rightStick.position = CGPoint(x: rightStickRadius.position.x - rightXDist, y: rightStickRadius.position.y + rightYDist)
+                        player?.zRotation = rightAngle
+                        player?.startShooting(scene: self, vector: rightVector)
+                    }
                 }
             }
         }
@@ -304,23 +339,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // let dt = currentTime - self.lastUpdateTime
         
         // Update entities
-        scoreLabel.text = "Score: \(gameScore)"
-        if player != nil && player?.isAlive() == false {
-            self.run(SKAction.sequence([
-                SKAction.wait(forDuration: 2),
-                SKAction.run(resetGame)
-            ]))
-        }
-        
-        player?.position.x -= deltaX / 4
-        player?.position.y -= deltaY / 4
         camera?.position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
-        
-        if (isRightStickActive) {
-            let vector = CGVector(dx: rightStick.position.x - rightStickRadius.position.x, dy: rightStick.position.y - rightStickRadius.position.y)
-            player?.startShooting(scene: self, vector: vector)
+        if isGameOver == false {
+            player?.position.x -= deltaX / 4
+            player?.position.y -= deltaY / 4
+            
+            if (isRightStickActive) {
+                let vector = CGVector(dx: rightStick.position.x - rightStickRadius.position.x, dy: rightStick.position.y - rightStickRadius.position.y)
+                player?.startShooting(scene: self, vector: vector)
+            }
         }
-        
         
         for child in self.children {
             if child.name == "zombie" {
