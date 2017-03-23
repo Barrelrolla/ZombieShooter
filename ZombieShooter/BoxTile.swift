@@ -1,15 +1,15 @@
 //
-//  WallTile.swift
+//  BoxTile.swift
 //  ZombieShooter
 //
-//  Created by JT on 3/21/17.
+//  Created by JT on 3/23/17.
 //  Copyright © 2017 JT. All rights reserved.
 //
 
 import Foundation
 import SpriteKit
 
-class WallTile : SKSpriteNode {
+class BoxTile : SKSpriteNode {
     
     override init(texture: SKTexture!, color: SKColor, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
@@ -18,12 +18,11 @@ class WallTile : SKSpriteNode {
         self.shadowedBitMask = 1
         self.shadowCastBitMask = 1
         self.physicsBody?.affectedByGravity = false
-        self.physicsBody?.pinned = true
-        self.physicsBody?.allowsRotation = false
-        self.physicsBody?.categoryBitMask = PhysicsCategories.Wall
-        self.physicsBody?.collisionBitMask = PhysicsCategories.Player | PhysicsCategories.Box
-        self.physicsBody?.contactTestBitMask = PhysicsCategories.Bullet
-        self.zPosition = 5
+        self.physicsBody?.pinned = false
+        self.physicsBody?.allowsRotation = true
+        self.physicsBody?.categoryBitMask = PhysicsCategories.Box
+        self.physicsBody?.collisionBitMask = PhysicsCategories.Player | PhysicsCategories.Zombie | PhysicsCategories.Box | PhysicsCategories.Wall
+        self.zPosition = 1
     }
     
     required init?(coder aDecoder: NSCoder) {

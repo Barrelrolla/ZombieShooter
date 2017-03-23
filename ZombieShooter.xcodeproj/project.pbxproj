@@ -21,7 +21,6 @@
 		C55769F01E80843A001E836A /* Weapon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55769EF1E80843A001E836A /* Weapon.swift */; };
 		C57E61EF1E81467B00D93BD1 /* PhysicsCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E61EE1E81467B00D93BD1 /* PhysicsCategories.swift */; };
 		C57E61F11E8149DD00D93BD1 /* RandomGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E61F01E8149DD00D93BD1 /* RandomGenerator.swift */; };
-		C57E61F51E814B2A00D93BD1 /* GroundTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E61F41E814B2A00D93BD1 /* GroundTile.swift */; };
 		C57E61F71E814B4E00D93BD1 /* WallTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E61F61E814B4E00D93BD1 /* WallTile.swift */; };
 		C57E61F91E814B9700D93BD1 /* LevelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E61F81E814B9700D93BD1 /* LevelFactory.swift */; };
 		C57E61FB1E81503800D93BD1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E61FA1E81503800D93BD1 /* Constants.swift */; };
@@ -29,6 +28,7 @@
 		C59A2C121E82A8130087DB6B /* ZombieFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C111E82A8130087DB6B /* ZombieFactory.swift */; };
 		C59A2C171E83FC660087DB6B /* coolFont.TTF in Resources */ = {isa = PBXBuildFile; fileRef = C59A2C161E83FC650087DB6B /* coolFont.TTF */; };
 		C59A2C191E83FEB30087DB6B /* ZombieType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C181E83FEB30087DB6B /* ZombieType.swift */; };
+		C59A2C1B1E842AFE0087DB6B /* BoxTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C1A1E842AFE0087DB6B /* BoxTile.swift */; };
 		C5D1F0401E7F4AFA00CEEC88 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D1F03F1E7F4AFA00CEEC88 /* Player.swift */; };
 /* End PBXBuildFile section */
 
@@ -49,7 +49,6 @@
 		C55769EF1E80843A001E836A /* Weapon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weapon.swift; sourceTree = "<group>"; };
 		C57E61EE1E81467B00D93BD1 /* PhysicsCategories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysicsCategories.swift; sourceTree = "<group>"; };
 		C57E61F01E8149DD00D93BD1 /* RandomGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomGenerator.swift; sourceTree = "<group>"; };
-		C57E61F41E814B2A00D93BD1 /* GroundTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroundTile.swift; sourceTree = "<group>"; };
 		C57E61F61E814B4E00D93BD1 /* WallTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallTile.swift; sourceTree = "<group>"; };
 		C57E61F81E814B9700D93BD1 /* LevelFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelFactory.swift; sourceTree = "<group>"; };
 		C57E61FA1E81503800D93BD1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -57,6 +56,7 @@
 		C59A2C111E82A8130087DB6B /* ZombieFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieFactory.swift; sourceTree = "<group>"; };
 		C59A2C161E83FC650087DB6B /* coolFont.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = coolFont.TTF; sourceTree = "<group>"; };
 		C59A2C181E83FEB30087DB6B /* ZombieType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieType.swift; sourceTree = "<group>"; };
+		C59A2C1A1E842AFE0087DB6B /* BoxTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoxTile.swift; sourceTree = "<group>"; };
 		C5D1F03F1E7F4AFA00CEEC88 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -151,9 +151,9 @@
 				C5D1F03F1E7F4AFA00CEEC88 /* Player.swift */,
 				C55769E81E80816E001E836A /* Bullet.swift */,
 				C55769EF1E80843A001E836A /* Weapon.swift */,
-				C57E61F41E814B2A00D93BD1 /* GroundTile.swift */,
 				C57E61F61E814B4E00D93BD1 /* WallTile.swift */,
 				C59A2C0F1E82A61E0087DB6B /* Zombie.swift */,
+				C59A2C1A1E842AFE0087DB6B /* BoxTile.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -240,13 +240,13 @@
 				C57E61F91E814B9700D93BD1 /* LevelFactory.swift in Sources */,
 				C55769E91E80816E001E836A /* Bullet.swift in Sources */,
 				C55769E61E807C2F001E836A /* PlayerFactory.swift in Sources */,
-				C57E61F51E814B2A00D93BD1 /* GroundTile.swift in Sources */,
 				C57E61F11E8149DD00D93BD1 /* RandomGenerator.swift in Sources */,
 				C57E61EF1E81467B00D93BD1 /* PhysicsCategories.swift in Sources */,
 				C59A2C101E82A61E0087DB6B /* Zombie.swift in Sources */,
 				C5032B521E7C07DD007DB5CE /* GameViewController.swift in Sources */,
 				C59A2C191E83FEB30087DB6B /* ZombieType.swift in Sources */,
 				C5032B4A1E7C07DD007DB5CE /* AppDelegate.swift in Sources */,
+				C59A2C1B1E842AFE0087DB6B /* BoxTile.swift in Sources */,
 				C59A2C121E82A8130087DB6B /* ZombieFactory.swift in Sources */,
 				C57E61FB1E81503800D93BD1 /* Constants.swift in Sources */,
 				C55769F01E80843A001E836A /* Weapon.swift in Sources */,
