@@ -16,8 +16,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var deltaX: CGFloat = 0
     private var deltaY: CGFloat = 0
     
+    var player = PlayerFactory.getPlayer(type: PlayerType.Male)
+    var gameScore = 0
+    let scoreLabel = SKLabelNode(fontNamed: "FeastofFleshBB")
     let hasLighting = true
-    let player = PlayerFactory.getPlayer(type: PlayerType.Male)
+    let background: SKTileMapNode = LevelFactory.generateBackground()
     let leftStickRadius = SKSpriteNode(imageNamed: "transparentLight09")
     let leftStick = SKSpriteNode(imageNamed: "transparentLight49")
     let rightStickRadius = SKSpriteNode(imageNamed: "transparentLight09")
@@ -28,8 +31,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func resetGame() {
+        self.removeAllActions()
         self.camera?.removeAllChildren()
         self.removeAllChildren()
+        gameScore = 0
+        player = PlayerFactory.getPlayer(type: PlayerType.Male)
         self.startGame()
     }
     
@@ -40,6 +46,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.backgroundColor = SKColor.black
         self.physicsWorld.contactDelegate = self
         // var background = [SKSpriteNode]()
+        
+        background.zPosition = 0
+        background.anchorPoint = CGPoint(x: 0, y: 0)
+        background.position = CGPoint(x: 0, y: 0)
+        background.lightingBitMask = 1
+        self.addChild(background)
         
         LevelFactory.addLevel(number: 1, scene: self)
         
@@ -99,6 +111,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         leftStickRadius.setScale(0.35)
         leftStickRadius.position = CGPoint(x: -120, y: -50)
         leftStickRadius.zPosition = 100
+        leftStickRadius.alpha = 0.5
         camera.addChild(leftStickRadius)
         
         leftStick.setScale(0.25)
@@ -109,12 +122,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         rightStickRadius.setScale(0.35)
         rightStickRadius.position = CGPoint(x: 120, y: -50)
         rightStickRadius.zPosition = 100
+        rightStickRadius.alpha = 0.5
         camera.addChild(rightStickRadius)
         
         rightStick.setScale(0.25)
         rightStick.position = CGPoint(x: rightStickRadius.position.x, y: rightStickRadius.position.y)
         rightStick.zPosition = 101
         camera.addChild(rightStick)
+        
+        scoreLabel.text = "Score: \(gameScore)"
+        scoreLabel.fontSize = 15
+        scoreLabel.color = SKColor.white
+        scoreLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
+        scoreLabel.position = CGPoint(x: -150, y: 70)
+        scoreLabel.zPosition = 100
+        camera.addChild(scoreLabel)
         
         camera.position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
         let zoomAction = SKAction.scale(to: 2.5, duration: 0)
@@ -132,17 +154,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let zombie = ZombieFactory.getNewZombie()
         let rng = Int(RandomGenerator.random(min: 0, max: 3))
         if rng == 0 {
-            let newrng = RandomGenerator.random(min: 0, max: self.size.height * 4)
+            let newrng = RandomGenerator.random(min: 0, max: background.mapSize.height)
             zombie.position = CGPoint(x: 0, y: newrng)
         } else if rng == 1 {
-            let newrng = RandomGenerator.random(min: 0, max: self.size.height * 4)
-            zombie.position = CGPoint(x: self.size.width * 4, y: newrng)
+            let newrng = RandomGenerator.random(min: 0, max: background.mapSize.height)
+            zombie.position = CGPoint(x: background.mapSize.width, y: newrng)
         } else if rng == 2 {
-            let newrng = RandomGenerator.random(min: 0, max: self.size.width * 4)
+            let newrng = RandomGenerator.random(min: 0, max: background.mapSize.width)
             zombie.position = CGPoint(x: newrng, y: 0)
         } else {
-            let newrng = RandomGenerator.random(min: 0, max: self.size.width * 4)
-            zombie.position = CGPoint(x: newrng, y: self.size.height * 4)
+            let newrng = RandomGenerator.random(min: 0, max: background.mapSize.width)
+            zombie.position = CGPoint(x: newrng, y: background.mapSize.height)
         }
         
         self.addChild(zombie)
@@ -165,7 +187,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else if body1.categoryBitMask == PhysicsCategories.Bullet && body2.categoryBitMask == PhysicsCategories.Zombie {
             if body2.node != nil {
                 let zombie = body2.node as! Zombie
-                zombie.takeDamage(amount: 1)
+                zombie.takeDamage(amount: 1, scene: self)
                 body1.node?.removeFromParent()
             }
         } else if body1.categoryBitMask == PhysicsCategories.Player && body2.categoryBitMask == PhysicsCategories.Zombie {
@@ -282,7 +304,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // let dt = currentTime - self.lastUpdateTime
         
         // Update entities
-        if player?.isAlive() == false {
+        scoreLabel.text = "Score: \(gameScore)"
+        if player != nil && player?.isAlive() == false {
             self.run(SKAction.sequence([
                 SKAction.wait(forDuration: 2),
                 SKAction.run(resetGame)

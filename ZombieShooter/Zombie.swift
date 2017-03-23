@@ -11,9 +11,13 @@ import SpriteKit
 
 class Zombie : SKSpriteNode {
     private var health : Int
+    private let type: ZombieType
+    private let points: Int
     
-    init(texture: SKTexture!, health: Int, scale: CGSize) {
+    init(texture: SKTexture!, health: Int, scale: CGSize, type: ZombieType) {
         self.health = health
+        self.type = type
+        self.points = (health / 2) * 100
         super.init(texture: texture, color: SKColor.red, size: texture.size())
         self.name = "zombie"
         self.scale(to: scale)
@@ -28,15 +32,18 @@ class Zombie : SKSpriteNode {
         self.physicsBody?.contactTestBitMask = PhysicsCategories.Player | PhysicsCategories.Bullet
     }
     
-    func takeDamage(amount: Int) {
+    func takeDamage(amount: Int, scene: GameScene) {
         health -= amount
         if health <= 0 {
+            scene.gameScore += points
             self.removeFromParent()
         }
     }
     
     required init?(coder aDecoder: NSCoder) {
         self.health = 1
+        self.type = ZombieType.Medium
+        self.points = 100
         super.init(coder: aDecoder)
     }
 }
