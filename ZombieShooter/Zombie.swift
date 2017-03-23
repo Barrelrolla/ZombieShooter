@@ -28,7 +28,7 @@ class Zombie : SKSpriteNode {
         self.shadowedBitMask = 1
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.categoryBitMask = PhysicsCategories.Zombie
-        self.physicsBody?.collisionBitMask = PhysicsCategories.Player & PhysicsCategories.Bullet
+        self.physicsBody?.collisionBitMask = PhysicsCategories.Player | PhysicsCategories.Box | PhysicsCategories.Zombie
         self.physicsBody?.contactTestBitMask = PhysicsCategories.Player | PhysicsCategories.Bullet
     }
     
@@ -36,6 +36,11 @@ class Zombie : SKSpriteNode {
         health -= amount
         if health <= 0 {
             scene.gameScore += points
+            scene.scoreLabel.text = "Score: \(scene.gameScore)"
+            let scaleUp = SKAction.scale(to: 1.1, duration: 0.2)
+            let scaleDown = SKAction.scale(to: 1, duration: 0.2)
+            let scaleSeq = SKAction.sequence([scaleUp, scaleDown])
+            scene.scoreLabel.run(scaleSeq)
             self.removeFromParent()
         }
     }

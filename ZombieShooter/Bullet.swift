@@ -18,6 +18,7 @@ class Bullet : SKSpriteNode {
         self.physicsBody?.categoryBitMask = PhysicsCategories.Bullet
         self.physicsBody?.collisionBitMask = PhysicsCategories.Zombie
         self.physicsBody?.contactTestBitMask = PhysicsCategories.Wall | PhysicsCategories.Zombie
+        self.lightingBitMask = 1
     }
     
     required init?(coder aDecoder: NSCoder) {

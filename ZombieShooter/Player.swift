@@ -22,7 +22,7 @@ class Player : SKSpriteNode {
         self.shadowedBitMask = 1
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.categoryBitMask = PhysicsCategories.Player
-        self.physicsBody?.collisionBitMask = PhysicsCategories.Wall | PhysicsCategories.Zombie
+        self.physicsBody?.collisionBitMask = PhysicsCategories.Wall | PhysicsCategories.Zombie | PhysicsCategories.Box
         self.physicsBody?.contactTestBitMask = PhysicsCategories.Zombie
     }
     

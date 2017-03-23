@@ -63,6 +63,11 @@ class LevelFactory {
                         tile = WallTile(texture: texture, color: SKColor.black, size: texture.size())
                         tile.position = CGPoint(x: x, y: y)
                         scene.addChild(tile)
+                    } else if (level[row][col] == 2) {
+                        let texture = SKTexture(imageNamed: "tile_129")
+                        tile = BoxTile(texture: texture, color: SKColor.yellow, size: texture.size())
+                        tile.position = CGPoint(x: x, y: y)
+                        scene.addChild(tile)
                     }
                     
                     x+=64
