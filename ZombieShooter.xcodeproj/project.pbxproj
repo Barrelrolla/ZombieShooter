@@ -27,6 +27,8 @@
 		C57E61FB1E81503800D93BD1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E61FA1E81503800D93BD1 /* Constants.swift */; };
 		C59A2C101E82A61E0087DB6B /* Zombie.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C0F1E82A61E0087DB6B /* Zombie.swift */; };
 		C59A2C121E82A8130087DB6B /* ZombieFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C111E82A8130087DB6B /* ZombieFactory.swift */; };
+		C59A2C171E83FC660087DB6B /* coolFont.TTF in Resources */ = {isa = PBXBuildFile; fileRef = C59A2C161E83FC650087DB6B /* coolFont.TTF */; };
+		C59A2C191E83FEB30087DB6B /* ZombieType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C181E83FEB30087DB6B /* ZombieType.swift */; };
 		C5D1F0401E7F4AFA00CEEC88 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D1F03F1E7F4AFA00CEEC88 /* Player.swift */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +55,8 @@
 		C57E61FA1E81503800D93BD1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C59A2C0F1E82A61E0087DB6B /* Zombie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zombie.swift; sourceTree = "<group>"; };
 		C59A2C111E82A8130087DB6B /* ZombieFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieFactory.swift; sourceTree = "<group>"; };
+		C59A2C161E83FC650087DB6B /* coolFont.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = coolFont.TTF; sourceTree = "<group>"; };
+		C59A2C181E83FEB30087DB6B /* ZombieType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieType.swift; sourceTree = "<group>"; };
 		C5D1F03F1E7F4AFA00CEEC88 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -86,6 +90,7 @@
 		C5032B481E7C07DD007DB5CE /* ZombieShooter */ = {
 			isa = PBXGroup;
 			children = (
+				C59A2C161E83FC650087DB6B /* coolFont.TTF */,
 				C5032B4D1E7C07DD007DB5CE /* Actions.sks */,
 				C5032B491E7C07DD007DB5CE /* AppDelegate.swift */,
 				C5032B561E7C07DD007DB5CE /* Assets.xcassets */,
@@ -108,6 +113,7 @@
 			children = (
 				C55769E31E807BCB001E836A /* PlayerType.swift */,
 				C57E61EE1E81467B00D93BD1 /* PhysicsCategories.swift */,
+				C59A2C181E83FEB30087DB6B /* ZombieType.swift */,
 			);
 			name = Enums;
 			sourceTree = "<group>";
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C59A2C171E83FC660087DB6B /* coolFont.TTF in Resources */,
 				C5032B551E7C07DD007DB5CE /* Main.storyboard in Resources */,
 				C5032B4C1E7C07DD007DB5CE /* GameScene.sks in Resources */,
 				C5032B571E7C07DD007DB5CE /* Assets.xcassets in Resources */,
@@ -238,6 +245,7 @@
 				C57E61EF1E81467B00D93BD1 /* PhysicsCategories.swift in Sources */,
 				C59A2C101E82A61E0087DB6B /* Zombie.swift in Sources */,
 				C5032B521E7C07DD007DB5CE /* GameViewController.swift in Sources */,
+				C59A2C191E83FEB30087DB6B /* ZombieType.swift in Sources */,
 				C5032B4A1E7C07DD007DB5CE /* AppDelegate.swift in Sources */,
 				C59A2C121E82A8130087DB6B /* ZombieFactory.swift in Sources */,
 				C57E61FB1E81503800D93BD1 /* Constants.swift in Sources */,
