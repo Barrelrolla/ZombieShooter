@@ -15,6 +15,7 @@ class GameOverScene: SKScene {
     let highScoreTextLabel = SKLabelNode(fontNamed: Constants.FontName)
     let highScoreLabel = SKLabelNode(fontNamed: Constants.FontName)
     let retryLabel = SKLabelNode(fontNamed: Constants.FontName)
+    let menuLabel = SKLabelNode(fontNamed: Constants.FontName)
     override func didMove(to view: SKView) {
         
         let defaults = UserDefaults()
@@ -54,8 +55,20 @@ class GameOverScene: SKScene {
         
         self.run(SKAction.sequence([
                 SKAction.run(addRetryButton),
-                SKAction.wait(forDuration: 1)
+                SKAction.wait(forDuration: 0.5),
+                SKAction.run(addMenuButton)
             ]))
+    }
+    
+    func addMenuButton() {
+        menuLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
+        menuLabel.text = "Back to Menu"
+        menuLabel.color = SKColor.white
+        menuLabel.fontSize = 20
+        menuLabel.position = CGPoint(x: self.frame.size.width / 2, y: (self.frame.size.height / 2) - 120)
+        menuLabel.run(SKAction.scale(to: 0, duration: 0))
+        self.addChild(menuLabel)
+        menuLabel.run(SKAction.scale(to: 1, duration: 0.2))
     }
     
     func addRetryButton() {
@@ -69,16 +82,24 @@ class GameOverScene: SKScene {
         retryLabel.run(SKAction.scale(to: 1, duration: 0.2))
     }
     
-    func changeScene() {
+    func newGame() {
         let newScene = GameScene(size: CGSize(width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width))
         newScene.scaleMode = .aspectFill
+        self.view?.presentScene(newScene)
+    }
+    
+    func mainMenu() {
+        let newScene = MainMenuScene(size: UIScreen.main.bounds.size)
+        newScene.scaleMode = .fill
         self.view?.presentScene(newScene)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             if retryLabel.contains(t.location(in: self)) {
-                changeScene()
+                newGame()
+            } else if menuLabel.contains(t.location(in: self)) {
+                mainMenu()
             }
         }
     }

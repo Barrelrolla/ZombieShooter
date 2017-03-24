@@ -10,6 +10,8 @@ import SpriteKit
 import GameplayKit
 
 var gameScore = 0
+var currLevel = 1
+var currWave = 0
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     private var lastUpdateTime : TimeInterval = 0
@@ -21,6 +23,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var enemyCount = 0
     var isGameOver = false
     var player = PlayerFactory.getPlayer(type: PlayerType.Male)
+    var zombiesInCurrWave = 0
+    var waveStarted = false
     let scoreLabel = SKLabelNode(fontNamed: Constants.FontName)
     let hasLighting = true
     let background: SKTileMapNode = LevelFactory.generateBackground()
@@ -38,6 +42,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.camera?.removeAllChildren()
         self.removeAllChildren()
         gameScore = 0
+        currLevel = 1
+        currWave = 0
+        zombiesInCurrWave = 0
+        waveStarted = false
         player = PlayerFactory.getPlayer(type: PlayerType.Male)
         isGameOver = false
         self.startGame()
@@ -47,6 +55,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let width = self.size.width
         let height = self.size.height
         gameScore = 0
+        currLevel = 1
+        currWave = 0
         //self.backgroundColor = SKColor(red: 182/255, green: 223/255, blue: 249/255, alpha: 1)
         self.backgroundColor = SKColor.black
         self.physicsWorld.contactDelegate = self
@@ -58,7 +68,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         background.lightingBitMask = 1
         self.addChild(background)
         
-        LevelFactory.addLevel(number: 1, scene: self)
+        LevelFactory.addLevel(number: currLevel, scene: self)
         
         player?.position = CGPoint(x: height / 2, y: width / 2)
         self.addChild(player!)
@@ -100,6 +110,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
          */
         if hasLighting == true {
             let light = SKLightNode()
+            light.name = "flashlight"
             light.ambientColor = SKColor.black
             light.lightColor = SKColor.white
             light.position = CGPoint(x: 0, y: 0)
@@ -147,11 +158,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         camera.run(zoomAction)
         self.addChild(camera)
         
-        let spawnAction = SKAction.run(spawnZombie)
-        let waitAction = SKAction.wait(forDuration: 3)
-        let spawnSequence = SKAction.sequence([spawnAction, waitAction])
-        let spawnForever = SKAction.repeatForever(spawnSequence)
-        self.run(spawnForever)
+        startNewWave()
+    }
+    
+    func startNewWave() {
+        currWave += 1
+        if currWave == 4 {
+            currWave = 1
+            currLevel += 1
+        }
+        var zombieCount = currWave * 10
+        zombieCount *= currLevel
+        zombiesInCurrWave = zombieCount
+        waveStarted = true
+        let waitAction = SKAction.wait(forDuration: 2)
+        let spawnZombies = SKAction.run {
+            for _ in 0..<currLevel {
+                self.spawnZombie()
+            }
+        }
+        let spawnSequence = SKAction.sequence([spawnZombies, waitAction])
+        let spawnWave = SKAction.repeat(spawnSequence, count: zombieCount / currLevel)
+        self.run(spawnWave)
     }
     
     func gameOver() {
@@ -222,6 +250,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 body1.node?.removeFromParent()
             }
         } else if body1.categoryBitMask == PhysicsCategories.Player && body2.categoryBitMask == PhysicsCategories.Zombie {
+            if (player?.children.count)! > 0 {
+                let light = player?.childNode(withName: "flashlight") as! SKLightNode
+                let becomeRed = SKAction.run {
+                    light.lightColor = SKColor.orange
+                }
+                let wait = SKAction.wait(forDuration: 0.2)
+                let becomeWhite = SKAction.run {
+                    light.lightColor = .white
+                }
+                let sequence = SKAction.sequence([becomeRed, wait, becomeWhite])
+                player?.run(sequence)
+            }
+
             player?.takeDamage(amount: 1, scene: self)
         }
     }
@@ -359,6 +400,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let angle = atan2(vector.dy, vector.dx)
                 zombie.zRotation = angle
             }
+        }
+        
+        if waveStarted == true && zombiesInCurrWave == 0 {
+            waveStarted = false
+            let wait = SKAction.wait(forDuration: 5)
+            let startWave = SKAction.run(startNewWave)
+            let sequence = SKAction.sequence([wait, startWave])
+            self.run(sequence)
         }
         
         self.lastUpdateTime = currentTime

@@ -18,11 +18,11 @@ class GameViewController: UIViewController {
         // Load 'GameScene.sks' as a GKScene. This provides gameplay related content
         // including entities and graphs.
         
-        let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width))
+        let scene = MainMenuScene(size: UIScreen.main.bounds.size)
             // Get the SKScene from the loaded GKScene
                 
                 // Set the scale mode to scale to fit the window
-                scene.scaleMode = .aspectFill
+                scene.scaleMode = .fill
 
                 
                 // Present the scene
