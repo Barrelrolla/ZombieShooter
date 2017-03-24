@@ -41,6 +41,7 @@ class Zombie : SKSpriteNode {
             let scaleDown = SKAction.scale(to: 1, duration: 0.2)
             let scaleSeq = SKAction.sequence([scaleUp, scaleDown])
             scene.scoreLabel.run(scaleSeq)
+            scene.zombiesInCurrWave -= 1
             self.removeFromParent()
         }
     }
