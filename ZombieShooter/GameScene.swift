@@ -22,7 +22,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var enemyCount = 0
     var isGameOver = false
-    var player = PlayerFactory.getPlayer(type: PlayerType.Female)
+    var player = PlayerFactory.getPlayer(type: PlayerType.Male)
     var zombiesInCurrWave = 0
     var waveStarted = false
     let scoreLabel = SKLabelNode(fontNamed: Constants.FontName)
