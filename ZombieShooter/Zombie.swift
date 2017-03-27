@@ -13,8 +13,10 @@ class Zombie : SKSpriteNode {
     private var health : Int
     private let type: ZombieType
     private let points: Int
+    private let moveSpeed: CGFloat
     
-    init(texture: SKTexture!, health: Int, scale: CGSize, type: ZombieType) {
+    init(texture: SKTexture!, health: Int, scale: CGSize, type: ZombieType, moveSpeed: CGFloat) {
+        self.moveSpeed = moveSpeed
         self.health = health
         self.type = type
         self.points = (health / 2) * 100
@@ -42,14 +44,28 @@ class Zombie : SKSpriteNode {
             let scaleSeq = SKAction.sequence([scaleUp, scaleDown])
             scene.scoreLabel.run(scaleSeq)
             scene.zombiesInCurrWave -= 1
+            scene.zombiesLabel.text = "Zombies Left: \(scene.zombiesInCurrWave)"
             self.removeFromParent()
         }
     }
+    
+    func moveTowardPlayer(player: Player) {
+        let dx = player.position.x - self.position.x
+        let dy = player.position.y - self.position.y
+        let angle = atan2(dy, dx)
+        self.zRotation = angle
+        
+        let vx = cos(angle) * moveSpeed
+        let vy = sin(angle) * moveSpeed
+        self.position.x += vx
+        self.position.y += vy
+        }
     
     required init?(coder aDecoder: NSCoder) {
         self.health = 1
         self.type = ZombieType.Medium
         self.points = 100
+        self.moveSpeed = 2
         super.init(coder: aDecoder)
     }
 }
