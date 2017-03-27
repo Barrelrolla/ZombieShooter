@@ -55,7 +55,6 @@ class LevelFactory {
                 col = 0
                 x = 0
                 repeat {
-                    
                     let tile: SKSpriteNode
                     
                     if (level[row][col] == 1) {

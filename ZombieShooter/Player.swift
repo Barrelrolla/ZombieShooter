@@ -10,10 +10,14 @@ import Foundation
 import SpriteKit
 
 class Player : SKSpriteNode {
-    private var health: Int = 10
-    private var weapon = Weapon(ammo: 10, shootRate: 0.3)
+    private var health: Int
+    private var weapon: Weapon
+    public var moveSpeed:CGFloat
     
-    override init(texture: SKTexture!, color: SKColor, size: CGSize) {
+    init(texture: SKTexture, color: UIColor, size: CGSize, health: Int, moveSpeed: CGFloat, weapon: Weapon) {
+        self.weapon = weapon
+        self.health = health
+        self.moveSpeed = moveSpeed
         super.init(texture: texture, color: color, size: size)
         self.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
         self.zPosition = SpriteLayer.Characters
@@ -61,6 +65,9 @@ class Player : SKSpriteNode {
     }
     
     required init?(coder aDecoder: NSCoder) {
+        self.health = 10
+        self.moveSpeed = 4
+        self.weapon = WeaponFactory.getWeapon(type: .Pistol)
         super.init(coder: aDecoder)
     }
 }

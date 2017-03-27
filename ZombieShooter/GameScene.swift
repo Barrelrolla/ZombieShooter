@@ -22,10 +22,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var enemyCount = 0
     var isGameOver = false
-    var player = PlayerFactory.getPlayer(type: PlayerType.Male)
+    var player = PlayerFactory.getPlayer(type: PlayerType.Female)
     var zombiesInCurrWave = 0
     var waveStarted = false
     let scoreLabel = SKLabelNode(fontNamed: Constants.FontName)
+    let zombiesLabel = SKLabelNode(fontNamed: Constants.FontName)
+    let waveLabel = SKLabelNode(fontNamed: Constants.FontName)
+    let levelLabel = SKLabelNode(fontNamed: Constants.FontName)
     let hasLighting = true
     let background: SKTileMapNode = LevelFactory.generateBackground()
     let leftStickRadius = SKSpriteNode(imageNamed: "transparentLight09")
@@ -153,11 +156,47 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.zPosition = SpriteLayer.UIUpper
         camera.addChild(scoreLabel)
         
+        zombiesLabel.text = ""
+        zombiesLabel.fontSize = 15
+        zombiesLabel.color = .white
+        zombiesLabel.horizontalAlignmentMode = .right
+        zombiesLabel.position = CGPoint(x: 150, y: 70)
+        zombiesLabel.zPosition = SpriteLayer.UIUpper
+        camera.addChild(zombiesLabel)
+        
+        levelLabel.text = ""
+        levelLabel.fontSize = 24
+        levelLabel.color = .white
+        levelLabel.horizontalAlignmentMode = .center
+        levelLabel.position = CGPoint(x: 0, y: 45)
+        levelLabel.zPosition = SpriteLayer.UIUpper
+        levelLabel.run(SKAction.scale(to: 0, duration: 0))
+        camera.addChild(levelLabel)
+        
+        waveLabel.text = ""
+        waveLabel.fontSize = 24
+        waveLabel.color = .white
+        waveLabel.horizontalAlignmentMode = .center
+        waveLabel.position = CGPoint(x: 0, y: 20)
+        waveLabel.zPosition = SpriteLayer.UIUpper
+        waveLabel.run(SKAction.scale(to: 0, duration: 0))
+        camera.addChild(waveLabel)
+        
         camera.position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
         let zoomAction = SKAction.scale(to: 2.5, duration: 0)
         camera.run(zoomAction)
         self.addChild(camera)
         
+        levelLabel.text = "Level \(currLevel)"
+        let resizeAction = SKAction.sequence([
+                SKAction.scale(to: 1, duration: 0.1),
+                SKAction.wait(forDuration: 2),
+                SKAction.scale(to: 0, duration: 0.1),
+                SKAction.run {
+                self.levelLabel.text = ""
+            }
+            ])
+        levelLabel.run(resizeAction)
         startNewWave()
     }
     
@@ -166,11 +205,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if currWave == 4 {
             currWave = 1
             currLevel += 1
+            levelLabel.text = "Level \(currLevel)"
+            let resizeAction = SKAction.sequence([
+                SKAction.scale(to: 1, duration: 0.1),
+                SKAction.wait(forDuration: 2),
+                SKAction.scale(to: 0, duration: 0.1),
+                SKAction.run {
+                    self.levelLabel.text = ""
+                }
+                ])
+            levelLabel.run(resizeAction)
         }
+        
+        waveLabel.text = "Wave \(currWave)"
+        let resizeAction = SKAction.sequence([
+            SKAction.scale(to: 1, duration: 0.1),
+            SKAction.wait(forDuration: 2),
+            SKAction.scale(to: 0, duration: 0.1),
+            SKAction.run {
+                self.waveLabel.text = ""
+            }
+            ])
+        waveLabel.run(resizeAction)
+        
         var zombieCount = currWave * 10
         zombieCount *= currLevel
         zombiesInCurrWave = zombieCount
         waveStarted = true
+        zombiesLabel.text = "Zombies Left: \(zombiesInCurrWave)"
         let waitAction = SKAction.wait(forDuration: 2)
         let spawnZombies = SKAction.run {
             for _ in 0..<currLevel {
@@ -199,7 +261,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             SKAction.wait(forDuration: 2),
             SKAction.run(changeScene)
         ]))
-        
     }
     
     func changeScene() {
@@ -382,8 +443,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Update entities
         camera?.position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
         if isGameOver == false {
-            player?.position.x -= deltaX / 4
-            player?.position.y -= deltaY / 4
+            player?.position.x -= deltaX / (player?.moveSpeed)!
+            player?.position.y -= deltaY / (player?.moveSpeed)!
             
             if (isRightStickActive) {
                 let vector = CGVector(dx: rightStick.position.x - rightStickRadius.position.x, dy: rightStick.position.y - rightStickRadius.position.y)
@@ -394,11 +455,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for child in self.children {
             if child.name == "zombie" {
                 let zombie = child as! Zombie
+                /*
                 let moveAction = SKAction.move(to: (player?.position)!, duration: 2)
                 zombie.run(moveAction)
                 let vector = CGVector(dx: (player?.position.x)! - zombie.position.x, dy: (player?.position.y)! - zombie.position.y)
                 let angle = atan2(vector.dy, vector.dx)
                 zombie.zRotation = angle
+                */
+                zombie.moveTowardPlayer(player: player!)
             }
         }
         
