@@ -73,6 +73,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         player?.position = CGPoint(x: height / 2, y: width / 2)
         self.addChild(player!)
+        
         /*
          let dot = SKShapeNode(circleOfRadius: 1)
          dot.fillColor = SKColor.red
@@ -80,35 +81,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
          dot.position = CGPoint(x: 30, y: -10)
          dot.zPosition = 5
          player?.addChild(dot)
-         let texture = SKTexture(imageNamed: "obscurer2")
-         let leftLightObscurer = SKSpriteNode(texture: texture)
-         leftLightObscurer.anchorPoint = CGPoint(x: 0, y: 0)
-         leftLightObscurer.position = CGPoint(x: -20, y: -20)
-         leftLightObscurer.zPosition = 2
-         leftLightObscurer.lightingBitMask = 1
-         leftLightObscurer.shadowedBitMask = 1
-         leftLightObscurer.shadowCastBitMask = 1
-         leftLightObscurer.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
-         leftLightObscurer.physicsBody?.affectedByGravity = false
-         leftLightObscurer.physicsBody?.categoryBitMask = PhysicsCategories.None
-         leftLightObscurer.physicsBody?.collisionBitMask = PhysicsCategories.None
-         leftLightObscurer.alpha = 0.1
-         player?.addChild(leftLightObscurer)
-         let rightLightObscurer = SKSpriteNode(texture: texture)
-         rightLightObscurer.anchorPoint = CGPoint(x: 0, y: 0)
-         rightLightObscurer.position = CGPoint(x: -20, y: 20)
-         rightLightObscurer.zPosition = 2
-         rightLightObscurer.lightingBitMask = 1
-         rightLightObscurer.shadowedBitMask = 1
-         rightLightObscurer.shadowCastBitMask = 1
-         rightLightObscurer.alpha = 0.1
-         rightLightObscurer.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
-         rightLightObscurer.physicsBody?.affectedByGravity = false
-         rightLightObscurer.physicsBody?.categoryBitMask = PhysicsCategories.None
-         rightLightObscurer.physicsBody?.collisionBitMask = PhysicsCategories.None
-         rightLightObscurer.yScale = rightLightObscurer.yScale * -1
-         player?.addChild(rightLightObscurer)
-         */
+        */
+        
         if hasLighting == true {
             let light = SKLightNode()
             light.name = "flashlight"
