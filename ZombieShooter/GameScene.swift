@@ -60,10 +60,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameScore = 0
         currLevel = 1
         currWave = 0
-        //self.backgroundColor = SKColor(red: 182/255, green: 223/255, blue: 249/255, alpha: 1)
         self.backgroundColor = SKColor.black
         self.physicsWorld.contactDelegate = self
-        // var background = [SKSpriteNode]()
         
         background.zPosition = SpriteLayer.Background
         background.anchorPoint = CGPoint(x: 0, y: 0)
