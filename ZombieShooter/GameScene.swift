@@ -281,7 +281,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let zombie = body2.node as! Zombie
                 zombie.takeDamage(amount: 1, scene: self)
                 body1.node?.removeFromParent()
+                
+                var blood = SKSpriteNode()
+                var bloodFrames = [SKTexture]()
+                let bloodAtlas = SKTextureAtlas(named: "blood")
+                let numberOfImages = bloodAtlas.textureNames.count
+                for index in 1...numberOfImages {
+                    let textureName = "blood\(index)"
+                    bloodFrames.append(bloodAtlas.textureNamed(textureName))
+                }
+                
+                let firstFrame = bloodFrames[0]
+                blood = SKSpriteNode(texture: firstFrame)
+                blood.position = contact.contactPoint
+                blood.zRotation = zombie.zRotation
+                blood.zPosition = SpriteLayer.BackgroundTextures
+                blood.size = CGSize(width: 60, height: 60)
+                blood.lightingBitMask = 1
+                
+                self.addChild(blood)
+                blood.run(SKAction.sequence([
+                    SKAction.animate(with: bloodFrames, timePerFrame: 0.1, resize: false, restore: false),
+                    SKAction.run {
+                        blood.removeFromParent()
+                        
+                    }
+                ]))
+                
             }
+            
         } else if body1.categoryBitMask == PhysicsCategories.Player && body2.categoryBitMask == PhysicsCategories.Zombie {
             if (player?.children.count)! > 0 {
                 let light = player?.childNode(withName: "flashlight") as! SKLightNode

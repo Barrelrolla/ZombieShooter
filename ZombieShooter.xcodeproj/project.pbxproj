@@ -23,6 +23,8 @@
 		C57E61F11E8149DD00D93BD1 /* RandomGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E61F01E8149DD00D93BD1 /* RandomGenerator.swift */; };
 		C57E61F71E814B4E00D93BD1 /* WallTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E61F61E814B4E00D93BD1 /* WallTile.swift */; };
 		C57E61F91E814B9700D93BD1 /* LevelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E61F81E814B9700D93BD1 /* LevelFactory.swift */; };
+		C58039AA1E8AABB9003D439B /* blood.atlas in Resources */ = {isa = PBXBuildFile; fileRef = C58039A91E8AABB9003D439B /* blood.atlas */; };
+		C58039AE1E8AB4FE003D439B /* blood_d.atlas in Resources */ = {isa = PBXBuildFile; fileRef = C58039AD1E8AB4FE003D439B /* blood_d.atlas */; };
 		C59A2C101E82A61E0087DB6B /* Zombie.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C0F1E82A61E0087DB6B /* Zombie.swift */; };
 		C59A2C121E82A8130087DB6B /* ZombieFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C111E82A8130087DB6B /* ZombieFactory.swift */; };
 		C59A2C171E83FC660087DB6B /* coolFont.TTF in Resources */ = {isa = PBXBuildFile; fileRef = C59A2C161E83FC650087DB6B /* coolFont.TTF */; };
@@ -57,6 +59,8 @@
 		C57E61F01E8149DD00D93BD1 /* RandomGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomGenerator.swift; sourceTree = "<group>"; };
 		C57E61F61E814B4E00D93BD1 /* WallTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallTile.swift; sourceTree = "<group>"; };
 		C57E61F81E814B9700D93BD1 /* LevelFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelFactory.swift; sourceTree = "<group>"; };
+		C58039A91E8AABB9003D439B /* blood.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = blood.atlas; sourceTree = "<group>"; };
+		C58039AD1E8AB4FE003D439B /* blood_d.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = blood_d.atlas; sourceTree = "<group>"; };
 		C59A2C0F1E82A61E0087DB6B /* Zombie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zombie.swift; sourceTree = "<group>"; };
 		C59A2C111E82A8130087DB6B /* ZombieFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieFactory.swift; sourceTree = "<group>"; };
 		C59A2C161E83FC650087DB6B /* coolFont.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = coolFont.TTF; sourceTree = "<group>"; };
@@ -105,6 +109,8 @@
 				C59A2C161E83FC650087DB6B /* coolFont.TTF */,
 				C5032B4D1E7C07DD007DB5CE /* Actions.sks */,
 				C5032B491E7C07DD007DB5CE /* AppDelegate.swift */,
+				C58039AD1E8AB4FE003D439B /* blood_d.atlas */,
+				C58039A91E8AABB9003D439B /* blood.atlas */,
 				C5032B561E7C07DD007DB5CE /* Assets.xcassets */,
 				C55769E11E807BA1001E836A /* Enums */,
 				C55769E21E807BA7001E836A /* Factories */,
@@ -239,9 +245,11 @@
 				C59A2C171E83FC660087DB6B /* coolFont.TTF in Resources */,
 				C5032B551E7C07DD007DB5CE /* Main.storyboard in Resources */,
 				C5032B4C1E7C07DD007DB5CE /* GameScene.sks in Resources */,
+				C58039AE1E8AB4FE003D439B /* blood_d.atlas in Resources */,
 				C5032B571E7C07DD007DB5CE /* Assets.xcassets in Resources */,
 				C5032B5A1E7C07DD007DB5CE /* LaunchScreen.storyboard in Resources */,
 				C5032B4E1E7C07DD007DB5CE /* Actions.sks in Resources */,
+				C58039AA1E8AABB9003D439B /* blood.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
