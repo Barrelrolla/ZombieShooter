@@ -11,10 +11,14 @@ import SpriteKit
 
 class Weapon {
     public var ammo: Int
+    public let maxAmmo: Int
     public var shootRate: Double
     public var reloadTime: Double
+    public var weaponType: WeaponType
     
-    init(ammo: Int, shootRate: Double, reloadTime: Double) {
+    init(ammo: Int, shootRate: Double, reloadTime: Double, weaponType: WeaponType) {
+        self.weaponType = weaponType
+        self.maxAmmo = ammo
         self.ammo = ammo
         self.shootRate = shootRate
         self.reloadTime = reloadTime
@@ -24,5 +28,9 @@ class Weapon {
         let bullet = BulletFactory.getBullet(x: x, y: y, rotation: zRotation)
         scene.addChild(bullet)
         bullet.fly(vector: vector)
+    }
+    
+    func reload() {
+        self.ammo = self.maxAmmo
     }
 }

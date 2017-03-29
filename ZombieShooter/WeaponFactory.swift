@@ -13,9 +13,9 @@ class WeaponFactory {
     static func getWeapon(type: WeaponType) -> Weapon {
         switch type {
         case .Pistol:
-            return Weapon(ammo: 10, shootRate: 0.3, reloadTime: 0.7)
+            return Weapon(ammo: 10, shootRate: 0.3, reloadTime: 0.7, weaponType: WeaponType.Pistol)
         case .MachineGun:
-            return Weapon(ammo: 30, shootRate: 0.1, reloadTime: 1.5)
+            return Weapon(ammo: 30, shootRate: 0.1, reloadTime: 1.5, weaponType: WeaponType.MachineGun)
         }
     }
 }
