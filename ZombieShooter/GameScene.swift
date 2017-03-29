@@ -178,7 +178,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.run(SKAction.sequence([
                     SKAction.wait(forDuration: 5),
                     SKAction.run {
-                        let boss = ZombieFactory.getBoss()
+                        let boss = ZombieFactory.getBoss(healthModifier: currLevel)
                         boss.position.x = (self.player?.position.x)! * -1
                         boss.position.y = (self.player?.position.y)! * -1
                         self.addChild(boss)
