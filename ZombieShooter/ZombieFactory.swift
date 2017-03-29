@@ -24,11 +24,16 @@ class ZombieFactory {
         
         switch type {
         case .Small:
-            return Zombie(texture: texture, health: 2, scale: CGSize(width: (texture.size().width / 1.25), height: (texture.size().height / 1.25)), type: type, moveSpeed: 2)
+            return Zombie(texture: texture, health: 2, scale: CGSize(width: (texture.size().width / 1.25), height: (texture.size().height / 1.25)), moveSpeed: 2)
         case .Medium:
-            return Zombie(texture: texture, health: 5, scale: CGSize(width: texture.size().width, height: texture.size().height), type: type, moveSpeed: 1.5)
+            return Zombie(texture: texture, health: 5, scale: CGSize(width: texture.size().width, height: texture.size().height), moveSpeed: 1.5)
         case .Big:
-            return Zombie(texture: texture, health: 10, scale: CGSize(width: (texture.size().width * 1.5), height: (texture.size().height * 1.5)), type: type, moveSpeed: 1)
+            return Zombie(texture: texture, health: 10, scale: CGSize(width: (texture.size().width * 1.5), height: (texture.size().height * 1.5)), moveSpeed: 1)
         }
+    }
+    
+    static func getBoss() -> Zombie {
+        let texture = SKTexture(imageNamed: "robot1_hold")
+        return Zombie(texture: texture, health: 30, scale: CGSize(width: (texture.size().width * 2), height: (texture.size().height * 2)), moveSpeed: 1)
     }
 }

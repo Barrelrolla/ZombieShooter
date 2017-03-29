@@ -174,6 +174,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func startNewWave() {
         currWave += 1
+        if (currWave == 3) {
+            self.run(SKAction.sequence([
+                    SKAction.wait(forDuration: 5),
+                    SKAction.run {
+                        let boss = ZombieFactory.getBoss()
+                        boss.position.x = (self.player?.position.x)! * -1
+                        boss.position.y = (self.player?.position.y)! * -1
+                        self.addChild(boss)
+                }
+            ]))
+        }
         if currWave == 4 {
             currWave = 1
             currLevel += 1
@@ -202,7 +213,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         var zombieCount = currWave * 10
         zombieCount *= currLevel
-        zombiesInCurrWave = zombieCount
+        if currWave == 3 {
+            zombieCount /= 3
+            zombiesInCurrWave = zombieCount
+            zombiesInCurrWave += 1
+        } else {
+            zombiesInCurrWave = zombieCount
+        }
         waveStarted = true
         zombiesLabel.text = "Zombies Left: \(zombiesInCurrWave)"
         let waitAction = SKAction.wait(forDuration: 2)

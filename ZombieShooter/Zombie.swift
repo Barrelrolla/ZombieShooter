@@ -11,14 +11,12 @@ import SpriteKit
 
 class Zombie : SKSpriteNode {
     private var health : Int
-    private let type: ZombieType
     private let points: Int
     private let moveSpeed: CGFloat
     
-    init(texture: SKTexture!, health: Int, scale: CGSize, type: ZombieType, moveSpeed: CGFloat) {
+    init(texture: SKTexture!, health: Int, scale: CGSize, moveSpeed: CGFloat) {
         self.moveSpeed = moveSpeed
         self.health = health
-        self.type = type
         self.points = (health / 2) * 100
         super.init(texture: texture, color: SKColor.red, size: texture.size())
         self.name = "zombie"
@@ -91,7 +89,6 @@ class Zombie : SKSpriteNode {
     
     required init?(coder aDecoder: NSCoder) {
         self.health = 1
-        self.type = ZombieType.Medium
         self.points = 100
         self.moveSpeed = 2
         super.init(coder: aDecoder)

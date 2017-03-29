@@ -13,6 +13,7 @@ class BoxTile : SKSpriteNode {
     
     override init(texture: SKTexture!, color: SKColor, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
+        self.name = "Box"
         self.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
         self.lightingBitMask = 1
         self.shadowedBitMask = 1
