@@ -15,4 +15,5 @@ struct PhysicsCategories {
     static let Zombie: UInt32 = 0b100
     static let Wall: UInt32 = 0b1000
     static let Box: UInt32 = 0b10000
+    static let PowerUp: UInt32 = 0b100000
 }

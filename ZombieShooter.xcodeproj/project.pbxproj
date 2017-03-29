@@ -37,6 +37,11 @@
 		C59A2C271E8936070087DB6B /* WeaponFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C261E8936030087DB6B /* WeaponFactory.swift */; };
 		C59A2C291E89363A0087DB6B /* BulletFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C281E89363A0087DB6B /* BulletFactory.swift */; };
 		C59A2C2B1E8938C30087DB6B /* WeaponType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A2C2A1E8938C30087DB6B /* WeaponType.swift */; };
+		C5CC589E1E8BEF1400FFC4CA /* PowerUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC589D1E8BEF1400FFC4CA /* PowerUp.swift */; };
+		C5CC58A01E8BEF9B00FFC4CA /* MedKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC589F1E8BEF9B00FFC4CA /* MedKit.swift */; };
+		C5CC58A21E8BF28400FFC4CA /* MachineGun.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC58A11E8BF28400FFC4CA /* MachineGun.swift */; };
+		C5CC58A41E8BF3CA00FFC4CA /* PowerUpFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC58A31E8BF3CA00FFC4CA /* PowerUpFactory.swift */; };
+		C5CC58A61E8BF3F800FFC4CA /* PowerUpType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC58A51E8BF3F800FFC4CA /* PowerUpType.swift */; };
 		C5D1F0401E7F4AFA00CEEC88 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D1F03F1E7F4AFA00CEEC88 /* Player.swift */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +78,11 @@
 		C59A2C261E8936030087DB6B /* WeaponFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeaponFactory.swift; sourceTree = "<group>"; };
 		C59A2C281E89363A0087DB6B /* BulletFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BulletFactory.swift; sourceTree = "<group>"; };
 		C59A2C2A1E8938C30087DB6B /* WeaponType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeaponType.swift; sourceTree = "<group>"; };
+		C5CC589D1E8BEF1400FFC4CA /* PowerUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUp.swift; sourceTree = "<group>"; };
+		C5CC589F1E8BEF9B00FFC4CA /* MedKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MedKit.swift; sourceTree = "<group>"; };
+		C5CC58A11E8BF28400FFC4CA /* MachineGun.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MachineGun.swift; sourceTree = "<group>"; };
+		C5CC58A31E8BF3CA00FFC4CA /* PowerUpFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUpFactory.swift; sourceTree = "<group>"; };
+		C5CC58A51E8BF3F800FFC4CA /* PowerUpType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUpType.swift; sourceTree = "<group>"; };
 		C5D1F03F1E7F4AFA00CEEC88 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -134,6 +144,7 @@
 				C59A2C181E83FEB30087DB6B /* ZombieType.swift */,
 				C59A2C1C1E8476630087DB6B /* SpriteLayer.swift */,
 				C59A2C2A1E8938C30087DB6B /* WeaponType.swift */,
+				C5CC58A51E8BF3F800FFC4CA /* PowerUpType.swift */,
 			);
 			name = Enums;
 			sourceTree = "<group>";
@@ -146,6 +157,7 @@
 				C59A2C111E82A8130087DB6B /* ZombieFactory.swift */,
 				C59A2C261E8936030087DB6B /* WeaponFactory.swift */,
 				C59A2C281E89363A0087DB6B /* BulletFactory.swift */,
+				C5CC58A31E8BF3CA00FFC4CA /* PowerUpFactory.swift */,
 			);
 			name = Factories;
 			sourceTree = "<group>";
@@ -169,9 +181,20 @@
 			name = Utilites;
 			sourceTree = "<group>";
 		};
+		C5CC589C1E8BEE8F00FFC4CA /* PowerUps */ = {
+			isa = PBXGroup;
+			children = (
+				C5CC589D1E8BEF1400FFC4CA /* PowerUp.swift */,
+				C5CC589F1E8BEF9B00FFC4CA /* MedKit.swift */,
+				C5CC58A11E8BF28400FFC4CA /* MachineGun.swift */,
+			);
+			name = PowerUps;
+			sourceTree = "<group>";
+		};
 		C5D1F03E1E7F4ABF00CEEC88 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C5CC589C1E8BEE8F00FFC4CA /* PowerUps */,
 				C5D1F03F1E7F4AFA00CEEC88 /* Player.swift */,
 				C55769E81E80816E001E836A /* Bullet.swift */,
 				C55769EF1E80843A001E836A /* Weapon.swift */,
@@ -262,16 +285,21 @@
 			files = (
 				C55769E41E807BCB001E836A /* PlayerType.swift in Sources */,
 				C59A2C231E84989A0087DB6B /* Constants.swift in Sources */,
+				C5CC58A21E8BF28400FFC4CA /* MachineGun.swift in Sources */,
 				C5D1F0401E7F4AFA00CEEC88 /* Player.swift in Sources */,
 				C59A2C271E8936070087DB6B /* WeaponFactory.swift in Sources */,
 				C5032B501E7C07DD007DB5CE /* GameScene.swift in Sources */,
 				C57E61F91E814B9700D93BD1 /* LevelFactory.swift in Sources */,
 				C59A2C1D1E8476630087DB6B /* SpriteLayer.swift in Sources */,
+				C5CC58A01E8BEF9B00FFC4CA /* MedKit.swift in Sources */,
 				C55769E91E80816E001E836A /* Bullet.swift in Sources */,
 				C55769E61E807C2F001E836A /* PlayerFactory.swift in Sources */,
 				C57E61F11E8149DD00D93BD1 /* RandomGenerator.swift in Sources */,
+				C5CC58A61E8BF3F800FFC4CA /* PowerUpType.swift in Sources */,
+				C5CC589E1E8BEF1400FFC4CA /* PowerUp.swift in Sources */,
 				C59A2C2B1E8938C30087DB6B /* WeaponType.swift in Sources */,
 				C57E61EF1E81467B00D93BD1 /* PhysicsCategories.swift in Sources */,
+				C5CC58A41E8BF3CA00FFC4CA /* PowerUpFactory.swift in Sources */,
 				C59A2C251E854B0C0087DB6B /* MainMenuScene.swift in Sources */,
 				C59A2C1F1E8483EB0087DB6B /* GameOverScene.swift in Sources */,
 				C59A2C101E82A61E0087DB6B /* Zombie.swift in Sources */,

@@ -71,6 +71,16 @@ class Zombie : SKSpriteNode {
                 }
                 ]))
             
+            if self.points >= 1500 {
+                let item = PowerUpFactory.getPowerUp(type: .MachineGun, x: self.position.x, y: self.position.y)
+                scene.addChild(item)
+            } else {
+                let rng = Int(RandomGenerator.random(min: 0, max: 15))
+                if rng == 0 {
+                    let item = PowerUpFactory.getPowerUp(type: .Medkit, x: self.position.x, y: self.position.y)
+                        scene.addChild(item)
+                }
+            }
             self.removeFromParent()
         }
     }

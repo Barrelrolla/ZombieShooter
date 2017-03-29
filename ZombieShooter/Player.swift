@@ -15,12 +15,14 @@ class Player : SKSpriteNode {
     private let reloadTexture: SKTexture
     private var activeWeapon = 0
     private var health: Int
+    private var maxHealth: Int
     private var weapon: [Weapon]
     public var moveSpeed:CGFloat
     
     init(pistolTexture: SKTexture, machineGunTexture: SKTexture, reloadTexture: SKTexture, color: UIColor, size: CGSize, health: Int, moveSpeed: CGFloat, weapon: Weapon) {
         self.weapon = [weapon]
         self.health = health
+        self.maxHealth = health
         self.moveSpeed = moveSpeed
         self.pistolTexture = pistolTexture
         self.machineGunTexture = machineGunTexture
@@ -34,7 +36,7 @@ class Player : SKSpriteNode {
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.categoryBitMask = PhysicsCategories.Player
         self.physicsBody?.collisionBitMask = PhysicsCategories.Wall | PhysicsCategories.Zombie | PhysicsCategories.Box
-        self.physicsBody?.contactTestBitMask = PhysicsCategories.Zombie
+        self.physicsBody?.contactTestBitMask = PhysicsCategories.Zombie | PhysicsCategories.PowerUp
     }
     
     func startShooting(scene: GameScene, vector: CGVector) {
@@ -76,6 +78,10 @@ class Player : SKSpriteNode {
         }
     }
     
+    func restoreHealth() {
+        self.health = self.maxHealth
+    }
+    
     func addWeapon(weapon: Weapon) {
         self.weapon.append(weapon)
         self.activeWeapon = self.weapon.count - 1
@@ -103,6 +109,7 @@ class Player : SKSpriteNode {
     
     required init?(coder aDecoder: NSCoder) {
         self.health = 10
+        self.maxHealth = 10
         self.moveSpeed = 4
         self.weapon = [WeaponFactory.getWeapon(type: .Pistol)]
         self.pistolTexture = SKTexture(imageNamed: "survivor1_gun")

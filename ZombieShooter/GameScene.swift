@@ -98,24 +98,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let camera = SKCameraNode()
         self.camera = camera
         
-        leftStickRadius.setScale(0.35)
+        leftStickRadius.setScale(0.40)
         leftStickRadius.position = CGPoint(x: -120, y: -50)
         leftStickRadius.zPosition = SpriteLayer.UILower
         leftStickRadius.alpha = 0.5
         camera.addChild(leftStickRadius)
         
-        leftStick.setScale(0.25)
+        leftStick.setScale(0.30)
         leftStick.position = CGPoint(x: leftStickRadius.position.x, y: leftStickRadius.position.y)
         leftStick.zPosition = SpriteLayer.UIUpper
         camera.addChild(leftStick)
         
-        rightStickRadius.setScale(0.35)
+        rightStickRadius.setScale(0.40)
         rightStickRadius.position = CGPoint(x: 120, y: -50)
         rightStickRadius.zPosition = SpriteLayer.UILower
         rightStickRadius.alpha = 0.5
         camera.addChild(rightStickRadius)
         
-        rightStick.setScale(0.25)
+        rightStick.setScale(0.30)
         rightStick.position = CGPoint(x: rightStickRadius.position.x, y: rightStickRadius.position.y)
         rightStick.zPosition = SpriteLayer.UIUpper
         camera.addChild(rightStick)
@@ -342,6 +342,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
 
             player?.takeDamage(amount: 1, scene: self)
+        } else if body1.categoryBitMask == PhysicsCategories.Player && body2.categoryBitMask == PhysicsCategories.PowerUp {
+            if body2.node != nil {
+                let powerup = body2.node as! PowerUp
+                powerup.executeEffect(player: self.player!)
+            }
         }
     }
     
