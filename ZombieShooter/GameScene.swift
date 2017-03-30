@@ -6,8 +6,10 @@
 //  Copyright © 2017 JT. All rights reserved.
 //
 
+import Foundation
 import SpriteKit
 import GameplayKit
+import AudioToolbox
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     private var lastUpdateTime : TimeInterval = 0
@@ -310,7 +312,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let becomeWhite = SKAction.run {
                     light.lightColor = .white
                 }
-                let sequence = SKAction.sequence([becomeRed, wait, becomeWhite])
+                let vibrate = SKAction.run {
+                    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
+                }
+                let sequence = SKAction.sequence([becomeRed, vibrate, wait, becomeWhite])
                 player.run(sequence)
             }
 
