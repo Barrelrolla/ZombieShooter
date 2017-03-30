@@ -14,7 +14,7 @@ class MachineGun: PowerUp {
         super.init(texture: SKTexture(imageNamed: "machineGun"), x: x, y: y)
     }
     
-    override func executeEffect(player: Player) {
+    override func executeEffect() {
         player.addWeapon(weapon: WeaponFactory.getWeapon(type: .MachineGun))
         self.removeFromParent()
     }

@@ -20,7 +20,7 @@ class MedKit: PowerUp {
         ]))
     }
     
-    override func executeEffect(player: Player) {
+    override func executeEffect() {
         player.restoreHealth()
         self.removeFromParent()
     }

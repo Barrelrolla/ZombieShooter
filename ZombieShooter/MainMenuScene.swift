@@ -68,7 +68,11 @@ class MainMenuScene: SKScene {
         label.run(moveToCenterAction)
     }
     
-    func changeScene() {
+    func changeScene() {        
+        gameScore = 0
+        currLevel = 1
+        currWave = 2
+        player = PlayerFactory.getPlayer(type: activePlayer)!
         let newScene = GameScene(size: CGSize(width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width))
         newScene.scaleMode = .aspectFill
         self.view?.presentScene(newScene)

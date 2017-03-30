@@ -22,7 +22,7 @@ class PowerUp: SKSpriteNode {
         self.scale(to: CGSize(width: self.size.width * 0.7, height: self.size.height * 0.7))
     }
     
-    func executeEffect(player: Player) {
+    func executeEffect() {
         
     }
     

@@ -19,6 +19,17 @@ class Player : SKSpriteNode {
     private var weapon: [Weapon]
     public var moveSpeed:CGFloat
     
+    init () {
+        self.health = 10
+        self.maxHealth = 10
+        self.moveSpeed = 4
+        self.weapon = [WeaponFactory.getWeapon(type: .Pistol)]
+        self.pistolTexture = SKTexture(imageNamed: "survivor1_gun")
+        self.machineGunTexture = SKTexture(imageNamed: "survivor1_silencer")
+        self.reloadTexture = SKTexture(imageNamed: "survivor1_reload")
+        super.init(texture: self.pistolTexture, color: SKColor.white, size: self.pistolTexture.size())
+    }
+    
     init(pistolTexture: SKTexture, machineGunTexture: SKTexture, reloadTexture: SKTexture, color: UIColor, size: CGSize, health: Int, moveSpeed: CGFloat, weapon: Weapon) {
         self.weapon = [weapon]
         self.health = health

@@ -9,10 +9,6 @@
 import SpriteKit
 import GameplayKit
 
-var gameScore = 0
-var currLevel = 1
-var currWave = 0
-
 class GameScene: SKScene, SKPhysicsContactDelegate {
     private var lastUpdateTime : TimeInterval = 0
     private var isLeftStickActive = false
@@ -22,7 +18,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var enemyCount = 0
     var isGameOver = false
-    var player = PlayerFactory.getPlayer(type: PlayerType.Male)
+    var background = SKTileMapNode()
     var zombiesInCurrWave = 0
     var waveStarted = false
     let scoreLabel = SKLabelNode(fontNamed: Constants.FontName)
@@ -30,7 +26,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let waveLabel = SKLabelNode(fontNamed: Constants.FontName)
     let levelLabel = SKLabelNode(fontNamed: Constants.FontName)
     let hasLighting = true
-    let background: SKTileMapNode = LevelFactory.generateBackground()
     let leftStickRadius = SKSpriteNode(imageNamed: "transparentLight09")
     let leftStick = SKSpriteNode(imageNamed: "transparentLight49")
     let rightStickRadius = SKSpriteNode(imageNamed: "transparentLight09")
@@ -40,39 +35,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.startGame()
     }
     
-    func resetGame() {
-        self.removeAllActions()
-        self.camera?.removeAllChildren()
-        self.removeAllChildren()
-        gameScore = 0
-        currLevel = 1
-        currWave = 0
-        zombiesInCurrWave = 0
-        waveStarted = false
-        player = PlayerFactory.getPlayer(type: PlayerType.Male)
-        isGameOver = false
-        self.startGame()
-    }
-    
     func startGame() {
         let width = self.size.width
         let height = self.size.height
-        gameScore = 0
-        currLevel = 1
-        currWave = 0
         self.backgroundColor = SKColor.black
         self.physicsWorld.contactDelegate = self
         
-        background.zPosition = SpriteLayer.Background
-        background.anchorPoint = CGPoint(x: 0, y: 0)
-        background.position = CGPoint(x: 0, y: 0)
-        background.lightingBitMask = 1
         self.addChild(background)
-        
+        LevelFactory.generateBackground(number: currLevel, scene: self)
         LevelFactory.addLevel(number: currLevel, scene: self)
         
-        player?.position = CGPoint(x: height / 2, y: width / 2)
-        self.addChild(player!)
+        player.position = CGPoint(x: height / 2, y: width / 2)
+        if player.parent == nil {
+            self.addChild(player)
+        }
         
         /*
          let dot = SKShapeNode(circleOfRadius: 1)
@@ -83,7 +59,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
          player?.addChild(dot)
         */
         
-        if hasLighting == true {
+        if hasLighting == true && player.childNode(withName: "flashlight") == nil {
             let light = SKLightNode()
             light.name = "flashlight"
             light.ambientColor = SKColor.black
@@ -91,7 +67,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             light.position = CGPoint(x: 0, y: 0)
             light.falloff = 1.3
             light.zPosition = SpriteLayer.Bullets
-            player?.addChild(light)
+            player.addChild(light)
         }
         
         
@@ -154,7 +130,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         waveLabel.run(SKAction.scale(to: 0, duration: 0))
         camera.addChild(waveLabel)
         
-        camera.position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
+        camera.position = CGPoint(x: player.position.x, y: player.position.y)
         let zoomAction = SKAction.scale(to: 2.5, duration: 0)
         camera.run(zoomAction)
         self.addChild(camera)
@@ -179,25 +155,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     SKAction.wait(forDuration: 5),
                     SKAction.run {
                         let boss = ZombieFactory.getBoss(healthModifier: currLevel)
-                        boss.position.x = (self.player?.position.x)! * -1
-                        boss.position.y = (self.player?.position.y)! * -1
+                        boss.position.x = player.position.x * -1
+                        boss.position.y = player.position.y * -1
                         self.addChild(boss)
                 }
             ]))
         }
+        
         if currWave == 4 {
-            currWave = 1
+            currWave = 0
             currLevel += 1
-            levelLabel.text = "Level \(currLevel)"
-            let resizeAction = SKAction.sequence([
-                SKAction.scale(to: 1, duration: 0.1),
-                SKAction.wait(forDuration: 2),
-                SKAction.scale(to: 0, duration: 0.1),
-                SKAction.run {
-                    self.levelLabel.text = ""
-                }
-                ])
-            levelLabel.run(resizeAction)
+            
+            let newScene = GameScene(size: self.size)
+            player.move(toParent: newScene)
+            newScene.scaleMode = .aspectFill
+            let transition = SKTransition.fade(withDuration: 1)
+            self.view?.presentScene(newScene, transition: transition)
         }
         
         waveLabel.text = "Wave \(currWave)"
@@ -328,8 +301,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
         } else if body1.categoryBitMask == PhysicsCategories.Player && body2.categoryBitMask == PhysicsCategories.Zombie {
-            if (player?.children.count)! > 0 {
-                let light = player?.childNode(withName: "flashlight") as! SKLightNode
+            if player.children.count > 0 {
+                let light = player.childNode(withName: "flashlight") as! SKLightNode
                 let becomeRed = SKAction.run {
                     light.lightColor = SKColor.orange
                 }
@@ -338,14 +311,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     light.lightColor = .white
                 }
                 let sequence = SKAction.sequence([becomeRed, wait, becomeWhite])
-                player?.run(sequence)
+                player.run(sequence)
             }
 
-            player?.takeDamage(amount: 1, scene: self)
+            player.takeDamage(amount: 1, scene: self)
         } else if body1.categoryBitMask == PhysicsCategories.Player && body2.categoryBitMask == PhysicsCategories.PowerUp {
             if body2.node != nil {
                 let powerup = body2.node as! PowerUp
-                powerup.executeEffect(player: self.player!)
+                powerup.executeEffect()
             }
         }
     }
@@ -375,8 +348,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     isRightStickActive = true
                     let rightVector = CGVector(dx: pos.x - rightStickRadius.position.x, dy: pos.y - rightStickRadius.position.y)
                     let rightAngle = atan2(rightVector.dy, rightVector.dx)
-                    player?.zRotation = rightAngle
-                    player?.startShooting(scene: self, vector: rightVector)
+                    player.zRotation = rightAngle
+                    player.startShooting(scene: self, vector: rightVector)
                     rightStick.position = CGPoint(x: pos.x, y: pos.y)
                 }
             }
@@ -416,13 +389,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
                 if rightStickRadius.contains(pos) {
                     rightStick.position = pos
-                    player?.zRotation = rightAngle
-                    player?.startShooting(scene: self, vector: rightVector)
+                    player.zRotation = rightAngle
+                    player.startShooting(scene: self, vector: rightVector)
                 } else {
                     if (isRightStickActive == true && pos.x > 0) {
                         rightStick.position = CGPoint(x: rightStickRadius.position.x - rightXDist, y: rightStickRadius.position.y + rightYDist)
-                        player?.zRotation = rightAngle
-                        player?.startShooting(scene: self, vector: rightVector)
+                        player.zRotation = rightAngle
+                        player.startShooting(scene: self, vector: rightVector)
                     }
                 }
             }
@@ -463,28 +436,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // let dt = currentTime - self.lastUpdateTime
         
         // Update entities
-        camera?.position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
+        camera?.position = CGPoint(x: player.position.x, y: player.position.y)
         if isGameOver == false {
-            player?.position.x -= deltaX / (player?.moveSpeed)!
-            player?.position.y -= deltaY / (player?.moveSpeed)!
+            player.position.x -= deltaX / player.moveSpeed
+            player.position.y -= deltaY / player.moveSpeed
             
             if (isRightStickActive) {
                 let vector = CGVector(dx: rightStick.position.x - rightStickRadius.position.x, dy: rightStick.position.y - rightStickRadius.position.y)
-                player?.startShooting(scene: self, vector: vector)
+                player.startShooting(scene: self, vector: vector)
             }
         }
         
         for child in self.children {
             if child.name == "zombie" {
                 let zombie = child as! Zombie
-                /*
-                let moveAction = SKAction.move(to: (player?.position)!, duration: 2)
-                zombie.run(moveAction)
-                let vector = CGVector(dx: (player?.position.x)! - zombie.position.x, dy: (player?.position.y)! - zombie.position.y)
-                let angle = atan2(vector.dy, vector.dx)
-                zombie.zRotation = angle
-                */
-                zombie.moveTowardPlayer(player: player!)
+                zombie.moveTowardPlayer(player: player)
             }
         }
         

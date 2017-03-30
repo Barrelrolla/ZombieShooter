@@ -82,7 +82,11 @@ class GameOverScene: SKScene {
         retryLabel.run(SKAction.scale(to: 1, duration: 0.2))
     }
     
-    func newGame() {
+    func newGame() {        
+        gameScore = 0
+        currLevel = 1
+        currWave = 0
+        player = PlayerFactory.getPlayer(type: activePlayer)!
         let newScene = GameScene(size: CGSize(width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width))
         newScene.scaleMode = .aspectFill
         self.view?.presentScene(newScene)
