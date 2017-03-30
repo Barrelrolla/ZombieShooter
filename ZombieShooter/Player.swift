@@ -13,25 +13,25 @@ class Player : SKSpriteNode {
     private let pistolTexture: SKTexture
     private let machineGunTexture: SKTexture
     private let reloadTexture: SKTexture
-    private var activeWeapon = 0
-    private var health: Int
-    private var maxHealth: Int
-    private var weapon: [Weapon]
+    public var health: Double
+    public var maxHealth: Double
+    public var activeWeapon = 0
+    public var weapons: [Weapon]
     public var moveSpeed:CGFloat
     
     init () {
         self.health = 10
         self.maxHealth = 10
         self.moveSpeed = 4
-        self.weapon = [WeaponFactory.getWeapon(type: .Pistol)]
+        self.weapons = [WeaponFactory.getWeapon(type: .Pistol)]
         self.pistolTexture = SKTexture(imageNamed: "survivor1_gun")
         self.machineGunTexture = SKTexture(imageNamed: "survivor1_silencer")
         self.reloadTexture = SKTexture(imageNamed: "survivor1_reload")
         super.init(texture: self.pistolTexture, color: SKColor.white, size: self.pistolTexture.size())
     }
     
-    init(pistolTexture: SKTexture, machineGunTexture: SKTexture, reloadTexture: SKTexture, color: UIColor, size: CGSize, health: Int, moveSpeed: CGFloat, weapon: Weapon) {
-        self.weapon = [weapon]
+    init(pistolTexture: SKTexture, machineGunTexture: SKTexture, reloadTexture: SKTexture, color: UIColor, size: CGSize, health: Double, moveSpeed: CGFloat, weapon: Weapon) {
+        self.weapons = [weapon]
         self.health = health
         self.maxHealth = health
         self.moveSpeed = moveSpeed
@@ -54,34 +54,36 @@ class Player : SKSpriteNode {
         let shootAction = self.action(forKey: "shooting")
         let reloadAction = self.action(forKey: "reloading")
         if (shootAction == nil && reloadAction == nil) {
-            if self.weapon[activeWeapon].ammo > 0 {
+            if self.weapons[activeWeapon].ammo > 0 {
                 var dx = vector.dx
                 var dy = vector.dy
                 let magnitude = sqrt(dx * dx + dy * dy)
                 dx /= magnitude
                 dy /= magnitude
                 let newVector = CGVector(dx: 500*dx, dy: 500*dy)
-                let weapon = self.weapon[activeWeapon]
+                let weapon = self.weapons[activeWeapon]
                 
                 let shoot = SKAction(weapon.shoot(scene: scene, vector: newVector, x: self.position.x, y: self.position.y, zRotation: self.zRotation))
-                let wait = SKAction.wait(forDuration: self.weapon[activeWeapon].shootRate)
+                let wait = SKAction.wait(forDuration: self.weapons[activeWeapon].shootRate)
                 let deleteAction = SKAction(self.removeAction(forKey: "shooting"))
                 let shootAndWait = SKAction.sequence([shoot, wait, deleteAction])
                 //let shooting = SKAction.repeatForever(shootAndWait)
                 self.run(shootAndWait, withKey: "shooting")
-                self.weapon[activeWeapon].ammo -= 1
+                self.weapons[activeWeapon].ammo -= 1
+                scene.ammoLabel.text = "\(self.weapons[player.activeWeapon].ammo)/--"
             } else {
-                let weapon = self.weapon[activeWeapon]
+                let weapon = self.weapons[activeWeapon]
                 self.texture = self.reloadTexture
                 let reload = SKAction.sequence([
                     SKAction.wait(forDuration: weapon.reloadTime),
                     SKAction.run {
-                        self.weapon[self.activeWeapon].reload()
-                        if self.weapon[self.activeWeapon].weaponType == WeaponType.MachineGun {
+                        self.weapons[self.activeWeapon].reload()
+                        if self.weapons[self.activeWeapon].weaponType == WeaponType.MachineGun {
                             self.texture = self.machineGunTexture
                         } else {
                             self.texture = self.pistolTexture
                         }
+                        scene.ammoLabel.text = "\(self.weapons[player.activeWeapon].ammo)/--"
                     }
                 ])
                 self.run(reload, withKey: "reloading")
@@ -94,22 +96,21 @@ class Player : SKSpriteNode {
     }
     
     func addWeapon(weapon: Weapon) {
-        self.weapon.append(weapon)
-        self.activeWeapon = self.weapon.count - 1
-        if weapon.weaponType == WeaponType.MachineGun {
-            self.texture = self.machineGunTexture
-        } else {
-            self.texture = self.pistolTexture
+        if self.weapons.count < 2 {
+            self.weapons.append(weapon)
+            self.activeWeapon = self.weapons.count - 1
+            if weapon.weaponType == WeaponType.MachineGun {
+                self.texture = self.machineGunTexture
+            } else {
+                self.texture = self.pistolTexture
+            }
         }
     }
     
-    func stopShooting() {
-        self.removeAction(forKey: "shooting")
-    }
-    
-    func takeDamage(amount: Int, scene: GameScene) {
+    func takeDamage(amount: Double, scene: GameScene) {
         if health > 0 {
             self.health -= amount
+            scene.updateHealthBar()
             if health <= 0 {
                 self.removeAllActions()
                 self.removeAllChildren()
@@ -122,7 +123,7 @@ class Player : SKSpriteNode {
         self.health = 10
         self.maxHealth = 10
         self.moveSpeed = 4
-        self.weapon = [WeaponFactory.getWeapon(type: .Pistol)]
+        self.weapons = [WeaponFactory.getWeapon(type: .Pistol)]
         self.pistolTexture = SKTexture(imageNamed: "survivor1_gun")
         self.machineGunTexture = SKTexture(imageNamed: "survivor1_silencer")
         self.reloadTexture = SKTexture(imageNamed: "survivor1_reload")

@@ -27,11 +27,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let zombiesLabel = SKLabelNode(fontNamed: Constants.FontName)
     let waveLabel = SKLabelNode(fontNamed: Constants.FontName)
     let levelLabel = SKLabelNode(fontNamed: Constants.FontName)
-    let hasLighting = true
+    let ammoLabel = SKLabelNode(fontNamed: Constants.FontName)
+    let healthLabel = SKLabelNode(fontNamed: Constants.FontName)
     let leftStickRadius = SKSpriteNode(imageNamed: "transparentLight09")
     let leftStick = SKSpriteNode(imageNamed: "transparentLight49")
     let rightStickRadius = SKSpriteNode(imageNamed: "transparentLight09")
     let rightStick = SKSpriteNode(imageNamed: "transparentLight49")
+    let statusBar = SKSpriteNode(imageNamed: "statusBar")
+    let weaponStatus = SKSpriteNode(imageNamed: "bullet")
+    let leftArrow = SKSpriteNode(imageNamed: "arrowBeige_left")
+    let rightArrow = SKSpriteNode(imageNamed: "arrowBeige_right")
     
     override func sceneDidLoad() {
         self.startGame()
@@ -98,9 +103,45 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         rightStick.zPosition = SpriteLayer.UIUpper
         camera.addChild(rightStick)
         
+        statusBar.setScale(0.5)
+        statusBar.position = CGPoint(x: 0, y: -70)
+        statusBar.zPosition = SpriteLayer.UILower
+        camera.addChild(statusBar)
+        
+        leftArrow.setScale(0.5)
+        leftArrow.position = CGPoint(x: -60, y: -70)
+        leftArrow.zPosition = SpriteLayer.UILower
+        camera.addChild(leftArrow)
+        
+        rightArrow.setScale(0.5)
+        rightArrow.position = CGPoint(x: 60, y: -70)
+        rightArrow.zPosition = SpriteLayer.UILower
+        camera.addChild(rightArrow)
+        
+        weaponStatus.setScale(0.5)
+        weaponStatus.position = CGPoint(x: 0, y: -70)
+        weaponStatus.zPosition = SpriteLayer.UIUpper
+        camera.addChild(weaponStatus)
+        
+        ammoLabel.text = "\(player.weapons[player.activeWeapon].ammo)/--"
+        ammoLabel.fontSize = 10
+        ammoLabel.fontColor = .black
+        ammoLabel.horizontalAlignmentMode = .right
+        ammoLabel.position = CGPoint(x: 40, y: -75)
+        ammoLabel.zPosition = SpriteLayer.UIUpper
+        camera.addChild(ammoLabel)
+        
+        healthLabel.text = "HP: \(Int(player.health))"
+        healthLabel.fontSize = 10
+        healthLabel.fontColor = .black
+        healthLabel.horizontalAlignmentMode = .left
+        healthLabel.position = CGPoint(x: -40, y: -75)
+        healthLabel.zPosition = SpriteLayer.UIUpper
+        camera.addChild(healthLabel)
+        
         scoreLabel.text = "Score: \(gameScore)"
         scoreLabel.fontSize = 15
-        scoreLabel.color = SKColor.white
+        scoreLabel.fontColor = .white
         scoreLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
         scoreLabel.position = CGPoint(x: -150, y: 70)
         scoreLabel.zPosition = SpriteLayer.UIUpper
@@ -108,7 +149,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         zombiesLabel.text = ""
         zombiesLabel.fontSize = 15
-        zombiesLabel.color = .white
+        zombiesLabel.fontColor = .white
         zombiesLabel.horizontalAlignmentMode = .right
         zombiesLabel.position = CGPoint(x: 150, y: 70)
         zombiesLabel.zPosition = SpriteLayer.UIUpper
@@ -116,7 +157,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         levelLabel.text = ""
         levelLabel.fontSize = 24
-        levelLabel.color = .white
+        levelLabel.fontColor = .white
         levelLabel.horizontalAlignmentMode = .center
         levelLabel.position = CGPoint(x: 0, y: 45)
         levelLabel.zPosition = SpriteLayer.UIUpper
@@ -125,7 +166,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         waveLabel.text = ""
         waveLabel.fontSize = 24
-        waveLabel.color = .white
+        waveLabel.fontColor = .white
         waveLabel.horizontalAlignmentMode = .center
         waveLabel.position = CGPoint(x: 0, y: 20)
         waveLabel.zPosition = SpriteLayer.UIUpper
@@ -148,6 +189,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             ])
         levelLabel.run(resizeAction)
         startNewWave()
+    }
+    
+    func updateHealthBar() {
+        healthLabel.text = "HP: \(Int(player.health))"
     }
     
     func startNewWave() {
@@ -324,6 +369,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if body2.node != nil {
                 let powerup = body2.node as! PowerUp
                 powerup.executeEffect()
+                updateHealthBar()
             }
         }
     }
