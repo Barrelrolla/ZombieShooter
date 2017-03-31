@@ -14,3 +14,4 @@ var currWave = 0
 var activePlayer = PlayerType.Male
 var player = Player()
 var hasLighting = true
+var hasSound = true

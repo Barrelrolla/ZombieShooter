@@ -43,6 +43,7 @@
 		C5CC58A41E8BF3CA00FFC4CA /* PowerUpFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC58A31E8BF3CA00FFC4CA /* PowerUpFactory.swift */; };
 		C5CC58A61E8BF3F800FFC4CA /* PowerUpType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC58A51E8BF3F800FFC4CA /* PowerUpType.swift */; };
 		C5CC58A81E8D5EE200FFC4CA /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC58A71E8D5EE100FFC4CA /* Globals.swift */; };
+		C5CC58AA1E8E39CD00FFC4CA /* CharacterSelectScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC58A91E8E39CD00FFC4CA /* CharacterSelectScene.swift */; };
 		C5D1F0401E7F4AFA00CEEC88 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D1F03F1E7F4AFA00CEEC88 /* Player.swift */; };
 /* End PBXBuildFile section */
 
@@ -85,6 +86,7 @@
 		C5CC58A31E8BF3CA00FFC4CA /* PowerUpFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUpFactory.swift; sourceTree = "<group>"; };
 		C5CC58A51E8BF3F800FFC4CA /* PowerUpType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUpType.swift; sourceTree = "<group>"; };
 		C5CC58A71E8D5EE100FFC4CA /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		C5CC58A91E8E39CD00FFC4CA /* CharacterSelectScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacterSelectScene.swift; sourceTree = "<group>"; };
 		C5D1F03F1E7F4AFA00CEEC88 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -170,6 +172,7 @@
 				C5032B4F1E7C07DD007DB5CE /* GameScene.swift */,
 				C59A2C1E1E8483EB0087DB6B /* GameOverScene.swift */,
 				C59A2C241E854B0C0087DB6B /* MainMenuScene.swift */,
+				C5CC58A91E8E39CD00FFC4CA /* CharacterSelectScene.swift */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -310,6 +313,7 @@
 				C5032B521E7C07DD007DB5CE /* GameViewController.swift in Sources */,
 				C59A2C191E83FEB30087DB6B /* ZombieType.swift in Sources */,
 				C5032B4A1E7C07DD007DB5CE /* AppDelegate.swift in Sources */,
+				C5CC58AA1E8E39CD00FFC4CA /* CharacterSelectScene.swift in Sources */,
 				C59A2C1B1E842AFE0087DB6B /* BoxTile.swift in Sources */,
 				C59A2C291E89363A0087DB6B /* BulletFactory.swift in Sources */,
 				C59A2C121E82A8130087DB6B /* ZombieFactory.swift in Sources */,

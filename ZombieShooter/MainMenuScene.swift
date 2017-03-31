@@ -8,13 +8,20 @@
 
 import Foundation
 import SpriteKit
+import GameKit
 
-class MainMenuScene: SKScene {
+class MainMenuScene: SKScene, GKGameCenterControllerDelegate {
     let zombieLabel = SKLabelNode(fontNamed: Constants.FontName)
     let startLabel = SKLabelNode(fontNamed: Constants.FontName)
     let shooterLabel = SKLabelNode(fontNamed: Constants.FontName)
+    let soundButton = SKSpriteNode(imageNamed: "musicOn")
+    let lightButton = SKSpriteNode(imageNamed: "contrast")
+    let leaderboardButton = SKSpriteNode(imageNamed:"leaderboardsComplex")
 
     override func didMove(to view: SKView) {
+        //authPlayer()
+        self.backgroundColor = SKColor(red: 62/255, green: 24/255, blue: 9/255, alpha: 1)
+        
         zombieLabel.text = "Zombie"
         zombieLabel.color = SKColor.white
         zombieLabel.fontSize = 50
@@ -29,7 +36,7 @@ class MainMenuScene: SKScene {
         shooterLabel.position = CGPoint(x: self.size.width + 200, y: (self.size.height / 2) + 10)
         self.addChild(shooterLabel)
         
-        startLabel.text = "Start"
+        startLabel.text = "Play"
         startLabel.color = SKColor.white
         startLabel.fontSize = 35
         startLabel.horizontalAlignmentMode = .center
@@ -37,22 +44,44 @@ class MainMenuScene: SKScene {
         startLabel.run(SKAction.scale(to: 0, duration: 0))
         self.addChild(startLabel)
         
+        soundButton.position = CGPoint(x: (self.size.width / 2) + 80, y: (self.size.height / 2) - 100)
+        soundButton.run(SKAction.scale(to: 0, duration: 0))
+        self.addChild(soundButton)
+        
+        lightButton.position = CGPoint(x: self.size.width / 2, y: (self.size.height / 2) - 100)
+        lightButton.run(SKAction.scale(to: 0, duration: 0))
+        lightButton.alpha = 0.2
+        self.addChild(lightButton)
+        
+        leaderboardButton.position = CGPoint(x: (self.size.width / 2) - 80, y: (self.size.height / 2) - 100)
+        leaderboardButton.run(SKAction.scale(to: 0, duration: 0))
+        self.addChild(leaderboardButton)
+        
         let moveZombieAction = SKAction.run(moveZombieToCenter)
         let moveShooterAction = SKAction.run(moveShooterToCenter)
         let scaleStart = SKAction.run(scaleStartLabel)
+        let scaleButtonsAction = SKAction.run(scaleButtons)
         let sequence = SKAction.sequence([
             SKAction.wait(forDuration: 1),
             moveZombieAction,
             SKAction.wait(forDuration: 0.5),
             moveShooterAction,
             SKAction.wait(forDuration: 0.5),
-            scaleStart
+            scaleStart,
+            SKAction.wait(forDuration: 0.5),
+            scaleButtonsAction
             ])
         self.run(sequence)
     }
     
     func scaleStartLabel() {
         startLabel.run(SKAction.scale(to: 1, duration: 0.1))
+    }
+    
+    func scaleButtons() {
+        soundButton.run(SKAction.scale(to: 1, duration: 0.1))
+        lightButton.run(SKAction.scale(to: 1, duration: 0.1))
+        leaderboardButton.run(SKAction.scale(to: 1, duration: 0.1))
     }
     
     func moveZombieToCenter() {
@@ -68,21 +97,54 @@ class MainMenuScene: SKScene {
         label.run(moveToCenterAction)
     }
     
-    func changeScene() {        
-        gameScore = 0
-        currLevel = 1
-        currWave = 0
-        player = PlayerFactory.getPlayer(type: activePlayer)!
-        let newScene = GameScene(size: CGSize(width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width))
-        newScene.scaleMode = .aspectFill
+    func changeScene() {
+        let newScene = CharacterSelectScene(size: self.size)
+        newScene.scaleMode = .fill
         self.view?.presentScene(newScene)
+    }
+    
+    func authPlayer() {
+        let localPlayer = GKLocalPlayer.localPlayer()
+        localPlayer.authenticateHandler = {
+            (view, error) in
+            if view != nil {
+                self.view?.window?.rootViewController?.present(view!, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    func showLeaderBoard() {
+        let viewController = self.view?.window?.rootViewController
+        let gcvc = GKGameCenterViewController()
+        gcvc.gameCenterDelegate = self
+        viewController?.present(viewController!, animated: true, completion: nil)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             if startLabel.contains(t.location(in: self)) {
                 changeScene()
+            } else if soundButton.contains(t.location(in: self)) {
+                hasSound = !hasSound
+                if hasSound == true {
+                    soundButton.texture = SKTexture(imageNamed: "musicOn")
+                } else {
+                    soundButton.texture = SKTexture(imageNamed: "musicOff")
+                }
+            } else if lightButton.contains(t.location(in: self)) {
+                hasLighting = !hasLighting
+                if hasLighting == true {
+                    lightButton.zRotation += CGFloat(M_PI/4.0) * 4
+                } else {
+                    lightButton.zRotation -= CGFloat(M_PI/4.0) * 4
+                }
+            } else if leaderboardButton.contains(t.location(in: self)) {
+                //showLeaderBoard()
             }
         }
+    }
+    
+    func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
+        gameCenterViewController.dismiss(animated: true, completion: nil)
     }
 }

@@ -111,11 +111,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         leftArrow.setScale(0.5)
         leftArrow.position = CGPoint(x: -60, y: -70)
         leftArrow.zPosition = SpriteLayer.UILower
+        leftArrow.alpha = 0.2
         camera.addChild(leftArrow)
         
         rightArrow.setScale(0.5)
         rightArrow.position = CGPoint(x: 60, y: -70)
         rightArrow.zPosition = SpriteLayer.UILower
+        rightArrow.alpha = 0.2
         camera.addChild(rightArrow)
         
         weaponStatus.setScale(0.5)

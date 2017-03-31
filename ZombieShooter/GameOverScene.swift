@@ -8,21 +8,26 @@
 
 import Foundation
 import SpriteKit
+import GameKit
 
-class GameOverScene: SKScene {
+class GameOverScene: SKScene, GKGameCenterControllerDelegate {
     let scoreTextLabel = SKLabelNode(fontNamed: Constants.FontName)
     let scoreLabel = SKLabelNode(fontNamed: Constants.FontName)
     let highScoreTextLabel = SKLabelNode(fontNamed: Constants.FontName)
     let highScoreLabel = SKLabelNode(fontNamed: Constants.FontName)
     let retryLabel = SKLabelNode(fontNamed: Constants.FontName)
     let menuLabel = SKLabelNode(fontNamed: Constants.FontName)
+    
     override func didMove(to view: SKView) {
+        //authPlayer()
+        self.backgroundColor = SKColor(red: 62/255, green: 24/255, blue: 9/255, alpha: 1)
         
         let defaults = UserDefaults()
         var highscore = defaults.integer(forKey: "HighScore")
         if gameScore > highscore {
             highscore = gameScore
             defaults.set(highscore, forKey: "HighScore")
+            //saveHighScore(number: highscore)
         }
         
         scoreTextLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
@@ -98,6 +103,25 @@ class GameOverScene: SKScene {
         self.view?.presentScene(newScene)
     }
     
+    func authPlayer() {
+        let localPlayer = GKLocalPlayer.localPlayer()
+        localPlayer.authenticateHandler = {
+            (view, error) in
+            if view != nil {
+                self.view?.window?.rootViewController?.present(view!, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    func saveHighScore(number: Int) {
+        if GKLocalPlayer.localPlayer().isAuthenticated {
+            let scoreReporter = GKScore(leaderboardIdentifier: "High")
+            scoreReporter.value = Int64(gameScore)
+            let scoreArray:[GKScore] = [scoreReporter]
+            GKScore.report(scoreArray, withCompletionHandler: nil)
+        }
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             if retryLabel.contains(t.location(in: self)) {
@@ -106,5 +130,9 @@ class GameOverScene: SKScene {
                 mainMenu()
             }
         }
+    }
+    
+    func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
+        gameCenterViewController.dismiss(animated: true, completion: nil)
     }
 }
