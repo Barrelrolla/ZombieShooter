@@ -49,6 +49,11 @@ class CharacterSelectScene: SKScene {
         femalePicture.position = CGPoint(x: (self.size.width / 2) + 100, y: self.size.height / 2)
         femalePicture.setScale(2)
         self.addChild(femalePicture)
+        
+        if activePlayer == .Female {
+            malePicture.run(SKAction.moveTo(x: (self.size.width / 2) - 100, duration: 0))
+            femalePicture.run(SKAction.moveTo(x: self.size.width / 2, duration: 0))
+        }
     }
     
     func handleSwipe(gestureRecognizer: UISwipeGestureRecognizer) {

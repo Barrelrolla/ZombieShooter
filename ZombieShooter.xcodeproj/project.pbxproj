@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C5000C591E901BAA00830A65 /* eatSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = C5000C541E901BAA00830A65 /* eatSound.wav */; };
+		C5000C5A1E901BAA00830A65 /* splatSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C5000C551E901BAA00830A65 /* splatSound.mp3 */; };
+		C5000C5B1E901BAA00830A65 /* hitSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = C5000C561E901BAA00830A65 /* hitSound.wav */; };
+		C5000C5C1E901BAA00830A65 /* reloadSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = C5000C571E901BAA00830A65 /* reloadSound.wav */; };
+		C5000C5D1E901BAA00830A65 /* shotSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = C5000C581E901BAA00830A65 /* shotSound.wav */; };
 		C5032B4A1E7C07DD007DB5CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5032B491E7C07DD007DB5CE /* AppDelegate.swift */; };
 		C5032B4C1E7C07DD007DB5CE /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C5032B4B1E7C07DD007DB5CE /* GameScene.sks */; };
 		C5032B4E1E7C07DD007DB5CE /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = C5032B4D1E7C07DD007DB5CE /* Actions.sks */; };
@@ -44,10 +49,19 @@
 		C5CC58A61E8BF3F800FFC4CA /* PowerUpType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC58A51E8BF3F800FFC4CA /* PowerUpType.swift */; };
 		C5CC58A81E8D5EE200FFC4CA /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC58A71E8D5EE100FFC4CA /* Globals.swift */; };
 		C5CC58AA1E8E39CD00FFC4CA /* CharacterSelectScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC58A91E8E39CD00FFC4CA /* CharacterSelectScene.swift */; };
+		C5CC58B11E8FDED800FFC4CA /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC58B01E8FDED800FFC4CA /* AudioPlayer.swift */; };
+		C5CC58B91E8FF0A200FFC4CA /* swooshSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = C5CC58B81E8FF0A200FFC4CA /* swooshSound.wav */; };
+		C5CC58BB1E8FF41300FFC4CA /* menuMusic.wav in Resources */ = {isa = PBXBuildFile; fileRef = C5CC58BA1E8FF41300FFC4CA /* menuMusic.wav */; };
+		C5CC58BD1E8FF41900FFC4CA /* backgroundMusic.wav in Resources */ = {isa = PBXBuildFile; fileRef = C5CC58BC1E8FF41900FFC4CA /* backgroundMusic.wav */; };
 		C5D1F0401E7F4AFA00CEEC88 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D1F03F1E7F4AFA00CEEC88 /* Player.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C5000C541E901BAA00830A65 /* eatSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = eatSound.wav; sourceTree = "<group>"; };
+		C5000C551E901BAA00830A65 /* splatSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = splatSound.mp3; sourceTree = "<group>"; };
+		C5000C561E901BAA00830A65 /* hitSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hitSound.wav; sourceTree = "<group>"; };
+		C5000C571E901BAA00830A65 /* reloadSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = reloadSound.wav; sourceTree = "<group>"; };
+		C5000C581E901BAA00830A65 /* shotSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = shotSound.wav; sourceTree = "<group>"; };
 		C5032B461E7C07DD007DB5CE /* ZombieShooter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZombieShooter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5032B491E7C07DD007DB5CE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C5032B4B1E7C07DD007DB5CE /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -87,6 +101,10 @@
 		C5CC58A51E8BF3F800FFC4CA /* PowerUpType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUpType.swift; sourceTree = "<group>"; };
 		C5CC58A71E8D5EE100FFC4CA /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		C5CC58A91E8E39CD00FFC4CA /* CharacterSelectScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacterSelectScene.swift; sourceTree = "<group>"; };
+		C5CC58B01E8FDED800FFC4CA /* AudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		C5CC58B81E8FF0A200FFC4CA /* swooshSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = swooshSound.wav; sourceTree = "<group>"; };
+		C5CC58BA1E8FF41300FFC4CA /* menuMusic.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = menuMusic.wav; sourceTree = "<group>"; };
+		C5CC58BC1E8FF41900FFC4CA /* backgroundMusic.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = backgroundMusic.wav; sourceTree = "<group>"; };
 		C5D1F03F1E7F4AFA00CEEC88 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -120,6 +138,7 @@
 		C5032B481E7C07DD007DB5CE /* ZombieShooter */ = {
 			isa = PBXGroup;
 			children = (
+				C5CC58AD1E8FDE9D00FFC4CA /* Sounds */,
 				C59A2C161E83FC650087DB6B /* coolFont.TTF */,
 				C5032B4D1E7C07DD007DB5CE /* Actions.sks */,
 				C5032B491E7C07DD007DB5CE /* AppDelegate.swift */,
@@ -183,6 +202,7 @@
 				C57E61F01E8149DD00D93BD1 /* RandomGenerator.swift */,
 				C59A2C221E84989A0087DB6B /* Constants.swift */,
 				C5CC58A71E8D5EE100FFC4CA /* Globals.swift */,
+				C5CC58B01E8FDED800FFC4CA /* AudioPlayer.swift */,
 			);
 			name = Utilites;
 			sourceTree = "<group>";
@@ -195,6 +215,21 @@
 				C5CC58A11E8BF28400FFC4CA /* MachineGun.swift */,
 			);
 			name = PowerUps;
+			sourceTree = "<group>";
+		};
+		C5CC58AD1E8FDE9D00FFC4CA /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				C5000C541E901BAA00830A65 /* eatSound.wav */,
+				C5000C551E901BAA00830A65 /* splatSound.mp3 */,
+				C5000C561E901BAA00830A65 /* hitSound.wav */,
+				C5000C571E901BAA00830A65 /* reloadSound.wav */,
+				C5000C581E901BAA00830A65 /* shotSound.wav */,
+				C5CC58BC1E8FF41900FFC4CA /* backgroundMusic.wav */,
+				C5CC58BA1E8FF41300FFC4CA /* menuMusic.wav */,
+				C5CC58B81E8FF0A200FFC4CA /* swooshSound.wav */,
+			);
+			name = Sounds;
 			sourceTree = "<group>";
 		};
 		C5D1F03E1E7F4ABF00CEEC88 /* Models */ = {
@@ -271,10 +306,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5000C5D1E901BAA00830A65 /* shotSound.wav in Resources */,
 				C59A2C171E83FC660087DB6B /* coolFont.TTF in Resources */,
+				C5CC58BB1E8FF41300FFC4CA /* menuMusic.wav in Resources */,
 				C5032B551E7C07DD007DB5CE /* Main.storyboard in Resources */,
+				C5000C5A1E901BAA00830A65 /* splatSound.mp3 in Resources */,
+				C5000C5B1E901BAA00830A65 /* hitSound.wav in Resources */,
+				C5CC58BD1E8FF41900FFC4CA /* backgroundMusic.wav in Resources */,
+				C5000C5C1E901BAA00830A65 /* reloadSound.wav in Resources */,
 				C5032B4C1E7C07DD007DB5CE /* GameScene.sks in Resources */,
+				C5CC58B91E8FF0A200FFC4CA /* swooshSound.wav in Resources */,
 				C58039AE1E8AB4FE003D439B /* blood_d.atlas in Resources */,
+				C5000C591E901BAA00830A65 /* eatSound.wav in Resources */,
 				C5032B571E7C07DD007DB5CE /* Assets.xcassets in Resources */,
 				C5032B5A1E7C07DD007DB5CE /* LaunchScreen.storyboard in Resources */,
 				C5032B4E1E7C07DD007DB5CE /* Actions.sks in Resources */,
@@ -311,6 +354,7 @@
 				C59A2C1F1E8483EB0087DB6B /* GameOverScene.swift in Sources */,
 				C59A2C101E82A61E0087DB6B /* Zombie.swift in Sources */,
 				C5032B521E7C07DD007DB5CE /* GameViewController.swift in Sources */,
+				C5CC58B11E8FDED800FFC4CA /* AudioPlayer.swift in Sources */,
 				C59A2C191E83FEB30087DB6B /* ZombieType.swift in Sources */,
 				C5032B4A1E7C07DD007DB5CE /* AppDelegate.swift in Sources */,
 				C5CC58AA1E8E39CD00FFC4CA /* CharacterSelectScene.swift in Sources */,

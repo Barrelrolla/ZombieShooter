@@ -9,6 +9,7 @@
 import Foundation
 import SpriteKit
 import GameKit
+import AVFoundation
 
 class MainMenuScene: SKScene, GKGameCenterControllerDelegate {
     let zombieLabel = SKLabelNode(fontNamed: Constants.FontName)
@@ -17,6 +18,7 @@ class MainMenuScene: SKScene, GKGameCenterControllerDelegate {
     let soundButton = SKSpriteNode(imageNamed: "musicOn")
     let lightButton = SKSpriteNode(imageNamed: "contrast")
     let leaderboardButton = SKSpriteNode(imageNamed:"leaderboardsComplex")
+    let defaults = UserDefaults()
 
     override func didMove(to view: SKView) {
         //authPlayer()
@@ -44,10 +46,16 @@ class MainMenuScene: SKScene, GKGameCenterControllerDelegate {
         startLabel.run(SKAction.scale(to: 0, duration: 0))
         self.addChild(startLabel)
         
+        if hasSound == false {
+            soundButton.texture = SKTexture(imageNamed: "musicOff")
+        }
         soundButton.position = CGPoint(x: (self.size.width / 2) + 80, y: (self.size.height / 2) - 100)
         soundButton.run(SKAction.scale(to: 0, duration: 0))
         self.addChild(soundButton)
         
+        if hasLighting == false {
+            lightButton.zRotation += CGFloat(M_PI/4.0) * 4
+        }
         lightButton.position = CGPoint(x: self.size.width / 2, y: (self.size.height / 2) - 100)
         lightButton.run(SKAction.scale(to: 0, duration: 0))
         lightButton.alpha = 0.2
@@ -55,6 +63,7 @@ class MainMenuScene: SKScene, GKGameCenterControllerDelegate {
         
         leaderboardButton.position = CGPoint(x: (self.size.width / 2) - 80, y: (self.size.height / 2) - 100)
         leaderboardButton.run(SKAction.scale(to: 0, duration: 0))
+        leaderboardButton.alpha = 0.1
         self.addChild(leaderboardButton)
         
         let moveZombieAction = SKAction.run(moveZombieToCenter)
@@ -63,10 +72,15 @@ class MainMenuScene: SKScene, GKGameCenterControllerDelegate {
         let scaleButtonsAction = SKAction.run(scaleButtons)
         let sequence = SKAction.sequence([
             SKAction.wait(forDuration: 1),
+            AudioPlayer.playSwooshSound(),
             moveZombieAction,
             SKAction.wait(forDuration: 0.5),
+            AudioPlayer.playSwooshSound(),
             moveShooterAction,
             SKAction.wait(forDuration: 0.5),
+            SKAction.run {
+                AudioPlayer.playMenuMusic()
+            },
             scaleStart,
             SKAction.wait(forDuration: 0.5),
             scaleButtonsAction
@@ -126,13 +140,17 @@ class MainMenuScene: SKScene, GKGameCenterControllerDelegate {
                 changeScene()
             } else if soundButton.contains(t.location(in: self)) {
                 hasSound = !hasSound
+                defaults.set(hasSound, forKey: "sound")
                 if hasSound == true {
                     soundButton.texture = SKTexture(imageNamed: "musicOn")
+                    AudioPlayer.playMenuMusic()
                 } else {
                     soundButton.texture = SKTexture(imageNamed: "musicOff")
+                    AudioPlayer.stopMusic()
                 }
             } else if lightButton.contains(t.location(in: self)) {
                 hasLighting = !hasLighting
+                defaults.set(hasLighting, forKey: "light")
                 if hasLighting == true {
                     lightButton.zRotation += CGFloat(M_PI/4.0) * 4
                 } else {

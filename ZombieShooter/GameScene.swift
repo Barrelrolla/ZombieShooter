@@ -48,6 +48,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.backgroundColor = SKColor.black
         self.physicsWorld.contactDelegate = self
         
+        AudioPlayer.playBGMusic()
+        
         self.addChild(background)
         LevelFactory.generateBackground(number: currLevel, scene: self)
         LevelFactory.addLevel(number: currLevel, scene: self)
@@ -125,7 +127,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         weaponStatus.zPosition = SpriteLayer.UIUpper
         camera.addChild(weaponStatus)
         
-        ammoLabel.text = "\(player.weapons[player.activeWeapon].ammo)/--"
+        let weapon = player.weapons[player.activeWeapon]
+        let ammo: String
+        if weapon.totalAmmo < 100000 {
+            ammo = String(weapon.totalAmmo)
+        } else {
+            ammo = "--"
+        }
+        ammoLabel.text = "\(player.weapons[player.activeWeapon].ammo)/\(ammo)"
         ammoLabel.fontSize = 10
         ammoLabel.fontColor = .black
         ammoLabel.horizontalAlignmentMode = .right
@@ -195,6 +204,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func updateHealthBar() {
         healthLabel.text = "HP: \(Int(player.health))"
+        let weapon = player.weapons[player.activeWeapon]
+        let ammo: String
+        if weapon.totalAmmo < 100000 {
+            ammo = String(weapon.totalAmmo)
+        } else {
+            ammo = "--"
+        }
+        ammoLabel.text = "\(player.weapons[player.activeWeapon].ammo)/\(ammo)"
     }
     
     func startNewWave() {
@@ -256,6 +273,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func gameOver() {
+        AudioPlayer.stopMusicWithFade()
         isGameOver = true
         leftStick.removeFromParent()
         leftStickRadius.removeFromParent()
@@ -269,6 +287,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         redLight.zPosition = SpriteLayer.Walls
         self.addChild(redLight)
         self.run(SKAction.sequence([
+            AudioPlayer.playEatSound(),
             SKAction.wait(forDuration: 2),
             SKAction.run(changeScene)
         ]))
@@ -362,7 +381,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let vibrate = SKAction.run {
                     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
                 }
-                let sequence = SKAction.sequence([becomeRed, vibrate, wait, becomeWhite])
+                let sequence = SKAction.sequence([AudioPlayer.playHitSound(), becomeRed, vibrate, wait, becomeWhite])
                 player.run(sequence)
             }
 

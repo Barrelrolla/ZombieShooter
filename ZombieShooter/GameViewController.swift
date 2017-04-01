@@ -14,6 +14,10 @@ class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let defaults = UserDefaults()
+        hasSound = defaults.bool(forKey: "sound")
+        hasLighting = defaults.bool(forKey: "light")
+        
         // Load 'GameScene.sks' as a GKScene. This provides gameplay related content
         // including entities and graphs.
         

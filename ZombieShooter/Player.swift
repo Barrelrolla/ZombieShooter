@@ -66,33 +66,55 @@ class Player : SKSpriteNode {
                 let shoot = SKAction(weapon.shoot(scene: scene, vector: newVector, x: self.position.x, y: self.position.y, zRotation: self.zRotation))
                 let wait = SKAction.wait(forDuration: self.weapons[activeWeapon].shootRate)
                 let deleteAction = SKAction(self.removeAction(forKey: "shooting"))
-                let shootAndWait = SKAction.sequence([shoot, wait, deleteAction])
+                let shootAndWait = SKAction.sequence([AudioPlayer.playShootSound(), shoot, wait, deleteAction])
                 //let shooting = SKAction.repeatForever(shootAndWait)
                 self.run(shootAndWait, withKey: "shooting")
                 self.weapons[activeWeapon].ammo -= 1
-                scene.ammoLabel.text = "\(self.weapons[player.activeWeapon].ammo)/--"
+                let ammo: String
+                if weapon.totalAmmo < 100000 {
+                    ammo = String(weapon.totalAmmo)
+                } else {
+                    ammo = "--"
+                }
+                scene.ammoLabel.text = "\(self.weapons[player.activeWeapon].ammo)/\(ammo)"
             } else {
-                let weapon = self.weapons[activeWeapon]
-                self.texture = self.reloadTexture
-                let reload = SKAction.sequence([
-                    SKAction.wait(forDuration: weapon.reloadTime),
-                    SKAction.run {
-                        self.weapons[self.activeWeapon].reload()
-                        if self.weapons[self.activeWeapon].weaponType == WeaponType.MachineGun {
-                            self.texture = self.machineGunTexture
-                        } else {
-                            self.texture = self.pistolTexture
+                if self.weapons[activeWeapon].totalAmmo > 0 {
+                    let weapon = self.weapons[activeWeapon]
+                    self.texture = self.reloadTexture
+                    let reload = SKAction.sequence([
+                        AudioPlayer.playReloadSound(),
+                        SKAction.wait(forDuration: weapon.reloadTime),
+                        SKAction.run {
+                            self.weapons[self.activeWeapon].reload()
+                            if self.weapons[self.activeWeapon].weaponType == WeaponType.MachineGun {
+                                self.texture = self.machineGunTexture
+                            } else {
+                                self.texture = self.pistolTexture
+                            }
+                            let ammo: String
+                            if weapon.totalAmmo < 100000 {
+                                ammo = String(weapon.totalAmmo)
+                            } else {
+                                ammo = "--"
+                            }
+                            scene.ammoLabel.text = "\(self.weapons[player.activeWeapon].ammo)/\(ammo)"
                         }
-                        scene.ammoLabel.text = "\(self.weapons[player.activeWeapon].ammo)/--"
-                    }
-                ])
-                self.run(reload, withKey: "reloading")
+                        ])
+                    self.run(reload, withKey: "reloading")
+                } else {
+                    self.weapons.remove(at: self.activeWeapon)
+                    self.activeWeapon = 0
+                    self.texture = pistolTexture
+                }
             }
         }
     }
     
     func restoreHealth() {
-        self.health = self.maxHealth
+        self.health += 10
+        if self.health > self.maxHealth {
+            self.health = self.maxHealth
+        }
     }
     
     func addWeapon(weapon: Weapon) {

@@ -15,7 +15,11 @@ class MachineGun: PowerUp {
     }
     
     override func executeEffect() {
-        player.addWeapon(weapon: WeaponFactory.getWeapon(type: .MachineGun))
+        if player.weapons.count == 1 {
+            player.addWeapon(weapon: WeaponFactory.getWeapon(type: .MachineGun))
+        } else {
+            player.weapons[1].getAmmo(amount: 300)
+        }
         self.removeFromParent()
     }
     
