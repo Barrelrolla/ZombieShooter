@@ -105,6 +105,7 @@ class Player : SKSpriteNode {
                     self.weapons.remove(at: self.activeWeapon)
                     self.activeWeapon = 0
                     self.texture = pistolTexture
+                    scene.updateArrows()
                 }
             }
         }
@@ -126,6 +127,15 @@ class Player : SKSpriteNode {
             } else {
                 self.texture = self.pistolTexture
             }
+        }
+    }
+    
+    func switchWeapon(weapon: Int) {
+        self.activeWeapon = weapon
+        if weapon == 0 {
+            self.texture = self.pistolTexture
+        } else if weapon == 1 {
+            self.texture = self.machineGunTexture
         }
     }
     

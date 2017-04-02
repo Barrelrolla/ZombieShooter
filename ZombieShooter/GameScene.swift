@@ -17,6 +17,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var isRightStickActive = false
     private var deltaX: CGFloat = 0
     private var deltaY: CGFloat = 0
+    private var isLeftArrowActive = false
+    private var isRightArrowActive = false
     
     var enemyCount = 0
     var isGameOver = false
@@ -110,13 +112,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         statusBar.zPosition = SpriteLayer.UILower
         camera.addChild(statusBar)
         
-        leftArrow.setScale(0.5)
+        leftArrow.setScale(0.8)
         leftArrow.position = CGPoint(x: -60, y: -70)
         leftArrow.zPosition = SpriteLayer.UILower
         leftArrow.alpha = 0.2
         camera.addChild(leftArrow)
         
-        rightArrow.setScale(0.5)
+        rightArrow.setScale(0.8)
         rightArrow.position = CGPoint(x: 60, y: -70)
         rightArrow.zPosition = SpriteLayer.UILower
         rightArrow.alpha = 0.2
@@ -199,12 +201,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             ])
         levelLabel.run(resizeAction)
+        updateArrows()
         startNewWave()
     }
     
     func updateHealthBar() {
         healthLabel.text = "HP: \(Int(player.health))"
         let weapon = player.weapons[player.activeWeapon]
+        if weapon.weaponType == .Pistol {
+            weaponStatus.texture = SKTexture(imageNamed: "bullet")
+        } else if weapon.weaponType == .MachineGun {
+            weaponStatus.texture = SKTexture(imageNamed: "silencer")
+        }
         let ammo: String
         if weapon.totalAmmo < 100000 {
             ammo = String(weapon.totalAmmo)
@@ -390,7 +398,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if body2.node != nil {
                 let powerup = body2.node as! PowerUp
                 powerup.executeEffect()
-                updateHealthBar()
+                updateArrows()
             }
         }
     }
@@ -423,9 +431,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     player.zRotation = rightAngle
                     player.startShooting(scene: self, vector: rightVector)
                     rightStick.position = CGPoint(x: pos.x, y: pos.y)
+                } else if isLeftArrowActive == true && leftArrow.contains(pos) {
+                    player.switchWeapon(weapon: 0)
+                    updateArrows()
+                } else if isRightArrowActive == true && rightArrow.contains(pos) {
+                    player.switchWeapon(weapon: 1)
+                    updateArrows()
                 }
             }
         }
+    }
+    
+    func updateArrows() {
+        if player.weapons.count == 1 {
+            isLeftArrowActive = false
+            leftArrow.alpha = 0.2
+            isRightArrowActive = false
+            rightArrow.alpha = 0.2
+        } else {
+            if player.activeWeapon == 0 {
+                isLeftArrowActive = false
+                leftArrow.alpha = 0.2
+                isRightArrowActive = true
+                rightArrow.alpha = 1
+            } else {
+                isLeftArrowActive = true
+                leftArrow.alpha = 1
+                isRightArrowActive = false
+                rightArrow.alpha = 0.2
+            }
+        }
+        updateHealthBar()
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {

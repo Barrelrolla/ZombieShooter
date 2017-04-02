@@ -18,6 +18,7 @@ class PowerUp: SKSpriteNode {
         self.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.categoryBitMask = PhysicsCategories.PowerUp
+        self.physicsBody?.collisionBitMask = PhysicsCategories.Box
         self.physicsBody?.contactTestBitMask = PhysicsCategories.Player
         self.scale(to: CGSize(width: self.size.width * 0.7, height: self.size.height * 0.7))
     }

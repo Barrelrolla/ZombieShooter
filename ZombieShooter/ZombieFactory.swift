@@ -34,6 +34,6 @@ class ZombieFactory {
     
     static func getBoss(healthModifier: Int) -> Zombie {
         let texture = SKTexture(imageNamed: "robot1_hold")
-        return Zombie(texture: texture, health: 30 * healthModifier, scale: CGSize(width: (texture.size().width * 2), height: (texture.size().height * 2)), moveSpeed: 1)
+        return Zombie(texture: texture, health: 30 * healthModifier, scale: CGSize(width: (texture.size().width * 2), height: (texture.size().height * 2)), moveSpeed: 1.5)
     }
 }
